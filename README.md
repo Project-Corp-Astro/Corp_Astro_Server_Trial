@@ -1,8 +1,16 @@
 # Corp Astro Backend Server
 
 <div align="center">
+  <img src="docs/assets/corp-astro-logo.png" alt="Corp Astro Logo" width="200"/>
+  <h3>Enterprise-Grade Astrological Solutions for Business</h3>
+</div>
 
-![Corp Astro Logo](https://via.placeholder.com/200x200.png?text=Corp+Astro)
+[![Build Status](https://img.shields.io/github/workflow/status/Project-Corp-Astro/Corp_Astro_Server_Trial/CI)](https://github.com/Project-Corp-Astro/Corp_Astro_Server_Trial/actions)
+[![Coverage](https://img.shields.io/codecov/c/github/Project-Corp-Astro/Corp_Astro_Server_Trial)](https://codecov.io/gh/Project-Corp-Astro/Corp_Astro_Server_Trial)
+[![License](https://img.shields.io/badge/license-Proprietary-blue.svg)](LICENSE)
+
+
+<div align="center">
 
 **A comprehensive backend server for corporate astrology services**
 
@@ -39,6 +47,90 @@ graph TD
 3. **Super Admin Panel (SAP)**: Web-based administration interface for content management and analytics (developed separately)
 4. **Astro Ratan**: AI agent built using OpenAI Assistant APIs, trained on astrology texts for personalized guidance
 5. **Astro Engine**: Core calculation component generating charts and predictions using Swiss Ephemeris with sidereal zodiac system, whole sign system, and lahiri ayanamsa
+
+### 🏗️ System Architecture
+
+```mermaid
+graph TD
+    subgraph "Client Layer"
+        MobileApp[Mobile Application]
+        SAP[Super Admin Panel]
+        ThirdParty[Third-Party Integrations]
+    end
+
+    subgraph "API Gateway Layer"
+        APIGateway[API Gateway]
+        RateLimit[Rate Limiting]
+        Auth[Authentication/Authorization]
+        Logging[Request Logging]
+    end
+
+    subgraph "Service Layer"
+        UserService[User Management]
+        ContentService[Content Generation]
+        BusinessService[Business Analysis]
+        NotificationService[Push Notifications]
+        AnalyticsService[Analytics System]
+        WebhookService[Webhook System]
+        WorkflowService[Workflow Engine]
+    end
+
+    subgraph "Integration Layer"
+        AstroEngine[Astro Engine]
+        AstroRatan[Astro Ratan AI]
+        Queue[Message Queue]
+        Cache[Redis Cache]
+    end
+
+    subgraph "Data Layer"
+        Database[(PostgreSQL)]
+        FileStorage[(File Storage)]
+        AnalyticsDB[(Analytics DB)]
+    end
+
+    MobileApp --> APIGateway
+    SAP --> APIGateway
+    ThirdParty --> APIGateway
+
+    APIGateway --> RateLimit
+    RateLimit --> Auth
+    Auth --> Logging
+    Logging --> ServiceLayer
+
+    ServiceLayer --> UserService
+    ServiceLayer --> ContentService
+    ServiceLayer --> BusinessService
+    ServiceLayer --> NotificationService
+    ServiceLayer --> AnalyticsService
+    ServiceLayer --> WebhookService
+    ServiceLayer --> WorkflowService
+
+    UserService --> Database
+    ContentService --> Database
+    BusinessService --> Database
+    NotificationService --> Database
+    AnalyticsService --> AnalyticsDB
+    WebhookService --> Database
+    WorkflowService --> Database
+
+    ContentService --> AstroEngine
+    ContentService --> AstroRatan
+    BusinessService --> AstroEngine
+    NotificationService --> Queue
+    WebhookService --> Queue
+
+    UserService --> Cache
+    ContentService --> Cache
+    BusinessService --> Cache
+    ContentService --> FileStorage
+
+    style APIGateway fill:#f9f,stroke:#333,stroke-width:2px
+    style Database fill:#bbf,stroke:#333,stroke-width:2px
+    style AstroEngine fill:#bfb,stroke:#333,stroke-width:2px
+    style AstroRatan fill:#bfb,stroke:#333,stroke-width:2px
+```
+
+The Corp Astro Backend Server follows a modular, service-oriented architecture designed for scalability, maintainability, and performance. The system is divided into distinct layers, each with specific responsibilities:
 
 ### 🚀 Key Features
 
@@ -88,45 +180,500 @@ graph TD
       <h4>📊 Analytics System</h4>
       <ul>
         <li>Comprehensive user behavior tracking</li>
-        <li>A/B testing framework for feature optimization</li>
-        <li>Conversion and retention metrics</li>
-        <li>Feature usage analytics</li>
-        <li>Super Admin Panel (SAP) integration</li>
-        <li>Real-time dashboards and reporting</li>
-      </ul>
-      <p>See <a href="#analytics-system-documentation">Analytics Documentation</a> below for details.</p>
     </td>
-    <td>
-      <h4>📱 Mobile-Specific Optimizations</h4>
-      <ul>
-        <li>Batch processing for efficient API calls</li>
-        <li>Response optimization for different network conditions</li>
-        <li>Offline support with data synchronization</li>
-        <li>Battery-aware operations for mobile clients</li>
-      </ul>
+    <td width="33%" align="center">
+      <h4>📱 Mobile Optimizations</h4>
+      <p>Batch processing, response compression, and offline support</p>
     </td>
   </tr>
   <tr>
-    <td>
-      <h4>⚡ Performance & Scalability</h4>
-      <ul>
-        <li>Response caching with Redis</li>
-        <li>Horizontal scaling support</li>
-        <li>Database connection pooling</li>
-        <li>Response compression and optimization</li>
-      </ul>
+    <td align="center">
+      <h4>📨 Push Notifications</h4>
+      <p>Cross-platform push notification delivery system</p>
     </td>
-    <td>
-      <h4>🤖 Machine Learning Integration</h4>
-      <ul>
-        <li>Personalized content recommendations</li>
-        <li>User behavior prediction models</li>
-        <li>Content relevance scoring</li>
-        <li>Integration with Astro Ratan AI agent</li>
-      </ul>
+    <td align="center">
+      <h4>🔄 Webhooks</h4>
+      <p>Real-time integration with external systems</p>
+    </td>
+    <td align="center">
+      <h4>⚙️ Workflow Engine</h4>
+      <p>Automated business processes and content generation</p>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <h4>💼 Business Analysis</h4>
+      <p>Corporate astrological insights and recommendations</p>
+    </td>
+    <td align="center">
+      <h4>📈 Scalability</h4>
+      <p>Horizontal scaling with load balancing and clustering</p>
+    </td>
+    <td align="center">
+      <h4>🔍 Monitoring</h4>
+      <p>Comprehensive logging and performance monitoring</p>
     </td>
   </tr>
 </table>
+
+## 🔒 Authentication System
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Mobile as Mobile App
+    participant Backend as Backend Server
+    participant DB as Database
+    
+    User->>Mobile: Enter Credentials
+    Mobile->>Backend: POST /api/auth/login
+    Backend->>DB: Validate Credentials
+    DB->>Backend: User Data
+    Backend->>Backend: Generate JWT
+    Backend->>Mobile: Return JWT + User Data
+    Mobile->>Mobile: Store JWT
+    
+    Note over Mobile,Backend: Subsequent Authenticated Requests
+    
+    Mobile->>Backend: Request with JWT Header
+    Backend->>Backend: Verify JWT
+    Backend->>Mobile: Protected Resource
+```
+
+The Corp Astro Backend Server implements a robust JWT-based authentication system with role-based access control. The system supports:
+
+- **User Registration & Login**: Secure account creation and authentication
+- **JWT Authentication**: Stateless authentication using JSON Web Tokens
+- **Role-Based Access Control**: Different permission levels (user, admin, etc.)
+- **Token Refresh**: Automatic token renewal without requiring re-login
+- **Password Reset**: Secure password recovery workflow
+- **Multi-device Support**: Simultaneous login from multiple devices
+- **Session Management**: View and revoke active sessions
+
+For detailed implementation, see the [Authentication Guide](/docs/authentication-guide.md).
+
+## 📨 Push Notification System
+
+```mermaid
+flowchart TD
+    Backend[Backend Server] -->|Trigger Event| NotificationService[Notification Service]
+    NotificationService -->|Format Payload| FCM[Firebase Cloud Messaging]
+    NotificationService -->|Format Payload| APNS[Apple Push Notification Service]
+    FCM -->|Deliver| Android[Android Devices]
+    APNS -->|Deliver| iOS[iOS Devices]
+    
+    subgraph Notification Types
+        Daily[Daily Horoscopes]
+        Monthly[Monthly Reports]
+        Business[Business Alerts]
+        Content[New Content]
+        Subscription[Subscription Alerts]
+    end
+    
+    subgraph Notification Service
+        Queue[Message Queue]
+        Templates[Notification Templates]
+        Scheduler[Notification Scheduler]
+        Analytics[Delivery Analytics]
+    end
+    
+    Notification Types --> NotificationService
+```
+
+The push notification system enables real-time communication with mobile app users through:
+
+- **Cross-Platform Support**: Integrated with both Firebase Cloud Messaging (Android) and Apple Push Notification Service (iOS)
+- **Rich Notifications**: Support for images, action buttons, and deep linking
+- **Notification Templates**: Predefined templates for common notification types
+- **Scheduled Notifications**: Time-based delivery for future notifications
+- **Personalization**: Dynamic content based on user preferences and behavior
+- **Delivery Analytics**: Track delivery, open rates, and user engagement
+- **Batched Delivery**: Optimized for large-scale notification campaigns
+
+For detailed implementation, see the [Push Notification Guide](/docs/push-notification-guide.md).
+
+## 🔄 Webhooks System
+
+```mermaid
+sequenceDiagram
+    participant Backend as Backend Server
+    participant EventBus as Event Bus
+    participant WebhookService as Webhook Service
+    participant Queue as Message Queue
+    participant External as External Systems
+    
+    Backend->>EventBus: Emit Event
+    EventBus->>WebhookService: Process Event
+    WebhookService->>WebhookService: Match Event to Subscriptions
+    WebhookService->>Queue: Queue Webhook Delivery
+    Queue->>External: HTTP POST Payload
+    External->>Queue: Response (200 OK)
+    Queue->>WebhookService: Delivery Status
+    WebhookService->>Backend: Update Webhook Log
+```
+
+The webhooks system enables real-time integration with external systems through:
+
+- **Event-Based Triggers**: Webhooks triggered by system events (user registration, content creation, etc.)
+- **Customizable Subscriptions**: Subscribe to specific event types
+- **Secure Delivery**: Payload signing for verification
+- **Reliable Delivery**: Automatic retries with exponential backoff
+- **Delivery Logging**: Comprehensive logs for debugging and auditing
+- **Rate Limiting**: Protection against excessive webhook traffic
+- **Webhook Management API**: Create, update, and delete webhook subscriptions
+
+For detailed implementation, see the [Webhooks Guide](/docs/webhooks-guide.md).
+
+## ⚙️ Workflow Engine
+
+```mermaid
+graph TD
+    Trigger[Event Trigger] --> WorkflowEngine[Workflow Engine]
+    WorkflowEngine --> ActionExecutor[Action Executor]
+    WorkflowEngine --> ConditionEvaluator[Condition Evaluator]
+    
+    subgraph Actions
+        ContentGeneration[Content Generation]
+        NotificationSending[Notification Sending]
+        ReportGeneration[Report Generation]
+        DataProcessing[Data Processing]
+        ExternalIntegration[External Integration]
+    end
+    
+    subgraph Conditions
+        TimeCondition[Time-based]
+        DataCondition[Data-based]
+        UserCondition[User-based]
+        EventCondition[Event-based]
+    end
+    
+    ActionExecutor --> Actions
+    ConditionEvaluator --> Conditions
+    
+    WorkflowEngine --> WorkflowStorage[Workflow Storage]
+    WorkflowEngine --> ExecutionLog[Execution Log]
+```
+
+The workflow engine automates complex business processes through:
+
+- **Visual Workflow Designer**: Create workflows without coding
+- **Multiple Trigger Types**: Schedule, event, API, and data triggers
+- **Conditional Logic**: Complex branching based on data conditions
+- **Action Library**: Pre-built actions for common tasks
+- **Custom Actions**: Extend with custom JavaScript actions
+- **Error Handling**: Configurable error handling and retries
+- **Execution Logging**: Detailed logs for debugging and auditing
+- **Versioning**: Track changes to workflow definitions
+
+Common workflow types include:
+
+1. **Content Generation Workflows**: Automatically generate daily horoscopes and monthly reports
+2. **User Onboarding Workflows**: Guide new users through the setup process
+3. **Subscription Management Workflows**: Handle subscription changes and renewals
+4. **Report Generation Workflows**: Create personalized business analysis reports
+
+For detailed implementation, see the [Workflows Guide](/docs/workflows-guide.md).
+
+## 📊 Analytics System
+
+```mermaid
+flowchart TD
+    MobileApp[Mobile App] -->|Track Event| EventCollection[Event Collection API]
+    SAP[Super Admin Panel] -->|View Reports| AnalyticsDashboard[Analytics Dashboard]
+    
+    EventCollection --> EventProcessing[Event Processing]
+    EventProcessing --> EventStorage[Event Storage]
+    EventStorage --> AnalyticsEngine[Analytics Engine]
+    AnalyticsEngine --> AnalyticsDashboard
+    
+    subgraph Event Types
+        UserEvents[User Events]
+        ContentEvents[Content Events]
+        BusinessEvents[Business Events]
+        SubscriptionEvents[Subscription Events]
+    end
+    
+    subgraph Analytics Features
+        Segmentation[User Segmentation]
+        Funnels[Conversion Funnels]
+        Retention[Retention Analysis]
+        ABTesting[A/B Testing]
+    end
+    
+    Event Types --> EventCollection
+    AnalyticsEngine --> AnalyticsFeatures
+```
+
+The analytics system provides comprehensive insights into user behavior and application performance through:
+
+- **Event Tracking**: Track user actions and system events
+- **User Segmentation**: Analyze behavior across different user segments
+- **Conversion Funnels**: Track user journey through critical paths
+- **Retention Analysis**: Measure user engagement over time
+- **A/B Testing Framework**: Test different features and content variations
+- **Custom Reports**: Generate tailored reports for specific business questions
+- **Real-time Dashboard**: Monitor key metrics in real-time
+- **Export Capabilities**: Export data for external analysis
+
+The A/B testing framework enables:
+
+1. **Feature Testing**: Test new features with a subset of users
+2. **Content Optimization**: Test different content variations
+3. **UI/UX Improvements**: Test different user interface designs
+4. **Pricing Strategies**: Test different pricing models and subscription tiers
+
+For detailed implementation, see the [Analytics System Guide](/docs/analytics-system.md).
+
+## 🔌 Integration Points
+
+```mermaid
+flowchart TD
+    Backend[Corp Astro Backend Server]
+    
+    subgraph External Components
+        AstroEngine[Astro Engine]
+        AstroRatan[Astro Ratan AI]
+        SAP[Super Admin Panel]
+    end
+    
+    subgraph Integration Methods
+        REST[REST APIs]
+        Webhooks[Webhooks]
+        Queue[Message Queue]
+        SDK[Client SDKs]
+    end
+    
+    Backend <--> REST
+    Backend <--> Webhooks
+    Backend <--> Queue
+    Backend <--> SDK
+    
+    REST <--> AstroEngine
+    REST <--> SAP
+    Webhooks <--> SAP
+    Queue <--> AstroRatan
+    SDK <--> MobileApp[Mobile App]
+```
+
+### Astro Engine Integration
+
+The Corp Astro Backend Server integrates with the Astro Engine for astrological calculations:
+
+- **Chart Generation**: Request natal, transit, and composite charts
+- **Prediction Calculations**: Generate predictions based on transits and progressions
+- **Dasha Calculations**: Calculate Vimshottari Dasha periods
+- **Compatibility Analysis**: Calculate business compatibility between entities
+
+Example integration code:
+
+```typescript
+// Example: Requesting a business natal chart from Astro Engine
+async function generateBusinessChart(businessId: string): Promise<ChartData> {
+  const business = await Business.findByPk(businessId);
+  
+  if (!business) {
+    throw new Error('Business not found');
+  }
+  
+  const chartRequest = {
+    entity_type: 'business',
+    date: business.registration_date,
+    time: business.registration_time,
+    location: business.registration_place,
+    options: {
+      house_system: 'whole_sign',
+      zodiac_type: 'sidereal',
+      ayanamsa: 'lahiri'
+    }
+  };
+  
+  const response = await axios.post(
+    `${process.env.ASTRO_ENGINE_URL}/api/charts/generate`,
+    chartRequest,
+    {
+      headers: {
+        'Authorization': `Bearer ${process.env.ASTRO_ENGINE_API_KEY}`,
+        'Content-Type': 'application/json'
+      }
+    }
+  );
+  
+  return response.data;
+}
+```
+
+### Astro Ratan AI Integration
+
+The backend server integrates with Astro Ratan AI for personalized astrological guidance:
+
+- **Content Generation**: Generate personalized horoscopes and reports
+- **Business Insights**: Generate business-specific astrological insights
+- **User Queries**: Process natural language queries about astrological matters
+- **Personalized Recommendations**: Generate tailored recommendations based on charts
+
+Example integration code:
+
+```typescript
+// Example: Generating personalized content with Astro Ratan AI
+async function generatePersonalizedContent(
+  userId: string,
+  contentType: string
+): Promise<string> {
+  const user = await User.findByPk(userId, {
+    include: [Business, UserPreferences]
+  });
+  
+  if (!user) {
+    throw new Error('User not found');
+  }
+  
+  // Get user's chart from Astro Engine
+  const userChart = await astroEngineService.getUserChart(userId);
+  
+  // Get current transits
+  const currentTransits = await astroEngineService.getCurrentTransits();
+  
+  // Prepare context for AI
+  const context = {
+    user_data: {
+      subscription_tier: user.subscription_tier,
+      preferences: user.UserPreferences
+    },
+    business_data: user.Business ? {
+      name: user.Business.name,
+      industry: user.Business.industry
+    } : null,
+    astrological_data: {
+      natal_chart: userChart,
+      current_transits: currentTransits
+    },
+    content_type: contentType
+  };
+  
+  // Request content from Astro Ratan AI
+  const response = await axios.post(
+    `${process.env.ASTRO_RATAN_URL}/api/generate`,
+    context,
+    {
+      headers: {
+        'Authorization': `Bearer ${process.env.ASTRO_RATAN_API_KEY}`,
+        'Content-Type': 'application/json'
+      }
+    }
+  );
+  
+  return response.data.content;
+}
+```
+
+### Super Admin Panel (SAP) Integration
+
+The backend server integrates with the Super Admin Panel for administration and analytics:
+
+- **User Management**: Manage user accounts and subscriptions
+- **Content Management**: Create and manage content
+- **Analytics Dashboard**: View analytics data and reports
+- **A/B Test Management**: Create and monitor A/B tests
+- **System Configuration**: Configure system settings
+
+For detailed implementation of all integration points, see the [Integration Guide](/docs/integration-guide.md).
+
+## 🗄️ Database Schema
+
+```mermaid
+erDiagram
+    USERS ||--o{ USER_DEVICES : has
+    USERS ||--o{ BUSINESSES : owns
+    USERS ||--o{ SUBSCRIPTIONS : has
+    USERS ||--o{ USER_PREFERENCES : has
+    BUSINESSES ||--o{ BUSINESS_ANALYSES : has
+    USERS ||--o{ REPORTS : receives
+    USERS ||--o{ NOTIFICATIONS : receives
+    USERS ||--o{ ANALYTICS_EVENTS : generates
+    REPORTS ||--o{ REPORT_SECTIONS : contains
+    ANALYTICS_EVENTS ||--o{ EVENT_PROPERTIES : has
+    USERS ||--o{ AB_TEST_ASSIGNMENTS : participates
+    AB_TESTS ||--o{ AB_TEST_VARIANTS : has
+    AB_TESTS ||--o{ AB_TEST_ASSIGNMENTS : assigns
+    WEBHOOKS ||--o{ WEBHOOK_DELIVERIES : triggers
+    WORKFLOWS ||--o{ WORKFLOW_EXECUTIONS : executes
+    WORKFLOW_EXECUTIONS ||--o{ WORKFLOW_EXECUTION_STEPS : contains
+```
+
+The Corp Astro Backend Server uses PostgreSQL as its primary database with a well-structured schema:
+
+### Core Tables
+
+- **users**: Stores user account information and authentication details
+- **businesses**: Stores business profiles for corporate astrology
+- **subscriptions**: Tracks user subscription plans and billing
+- **reports**: Stores generated astrological reports
+
+### Feature-Specific Tables
+
+- **analytics_events**: Stores user behavior and system events
+- **notifications**: Tracks push notifications sent to users
+- **webhooks**: Stores webhook configurations and delivery logs
+- **workflows**: Stores workflow definitions and execution logs
+
+For a complete database schema with all tables, relationships, and indexes, see the [Database Schema Documentation](/docs/database-schema.md).
+
+## 🌐 API Reference
+
+```mermaid
+graph TD
+    subgraph "API Categories"
+        Auth[Authentication API]
+        User[User API]
+        Content[Content API]
+        Business[Business API]
+        Analytics[Analytics API]
+        Notification[Notification API]
+        Webhook[Webhook API]
+        Integration[Integration API]
+    end
+    
+    Client[Client Applications] --> Auth
+    Client --> User
+    Client --> Content
+    Client --> Business
+    Client --> Analytics
+    Client --> Notification
+    Client --> Webhook
+    Client --> Integration
+```
+
+The Corp Astro Backend Server provides a comprehensive set of RESTful APIs:
+
+### Authentication API
+
+- `POST /api/auth/register` - Register a new user
+- `POST /api/auth/login` - Authenticate user and get JWT
+- `POST /api/auth/refresh` - Refresh JWT token
+- `POST /api/auth/forgot-password` - Request password reset
+- `GET /api/auth/me` - Get current user information
+
+### Content API
+
+- `GET /api/content/horoscopes/daily` - Get daily horoscope
+- `GET /api/content/horoscopes/monthly` - Get monthly horoscope
+- `GET /api/content/reports` - List available reports
+- `GET /api/content/reports/:id` - Get specific report
+
+### Business API
+
+- `GET /api/business/profile` - Get business profile
+- `POST /api/business/profile` - Create business profile
+- `PUT /api/business/profile` - Update business profile
+- `GET /api/business/analysis` - Get business analysis
+
+### Analytics API
+
+- `POST /api/analytics/events` - Track analytics event
+- `GET /api/analytics/dashboard` - Get analytics dashboard data
+- `GET /api/analytics/reports` - Get analytics reports
+
+For a complete API reference with all endpoints, request/response formats, and examples, see the [API Reference Documentation](/docs/api-reference.md).
 
 #### Feature Implementation Status
 
@@ -1963,6 +2510,426 @@ Detailed deployment instructions are available in the [Deployment Guide](/docs/d
    npm run docker:build
    docker run -p 3000:3000 --env-file .env corp-astro-server
    ```
+
+## User Flows & Interaction Diagrams
+
+### User Onboarding Flow
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Mobile as Mobile App
+    participant Backend as Backend Server
+    participant AstroEngine as Astro Engine
+    participant AstroRatan as Astro Ratan AI
+    
+    User->>Mobile: Install App
+    Mobile->>Mobile: Show Welcome Screen
+    User->>Mobile: Sign Up
+    Mobile->>Backend: POST /api/auth/register
+    Backend->>Backend: Create User Account
+    Backend->>Mobile: Return User Data
+    
+    Mobile->>Mobile: Request Business Details
+    User->>Mobile: Enter Business Details
+    Mobile->>Backend: POST /api/business/profile
+    Backend->>Backend: Create Business Profile
+    
+    Backend->>AstroEngine: Request Business Chart
+    AstroEngine->>Backend: Return Chart Data
+    
+    Backend->>AstroRatan: Generate Initial Insights
+    AstroRatan->>Backend: Return Business Insights
+    
+    Backend->>Backend: Generate Welcome Report
+    Backend->>Mobile: Return Business Profile & Initial Report
+    Mobile->>User: Show Dashboard with Initial Insights
+    
+    Backend->>Backend: Trigger Onboarding Workflow
+    Backend->>Mobile: Send Welcome Notification
+    Mobile->>User: Show Push Notification
+```
+
+### Daily User Interaction Flow
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Mobile as Mobile App
+    participant Backend as Backend Server
+    participant AstroEngine as Astro Engine
+    participant AstroRatan as Astro Ratan AI
+    
+    Note over Backend: Overnight Processing
+    Backend->>AstroEngine: Get Daily Transits
+    AstroEngine->>Backend: Return Transit Data
+    Backend->>AstroRatan: Generate Daily Horoscopes
+    AstroRatan->>Backend: Return Personalized Content
+    Backend->>Backend: Store Daily Horoscopes
+    
+    Note over User,Mobile: Morning
+    Backend->>Mobile: Send Daily Horoscope Notification
+    Mobile->>User: Show Push Notification
+    User->>Mobile: Open Notification
+    Mobile->>Backend: GET /api/content/horoscopes/daily
+    Backend->>Mobile: Return Daily Horoscope
+    Mobile->>User: Display Daily Horoscope
+    
+    Note over User,Mobile: During Day
+    User->>Mobile: Check Business Recommendations
+    Mobile->>Backend: GET /api/business/recommendations
+    Backend->>Mobile: Return Recommendations
+    Mobile->>User: Display Recommendations
+    
+    User->>Mobile: Use Free Tool (e.g., Name Analysis)
+    Mobile->>Backend: POST /api/content/tools/name-analysis
+    Backend->>Backend: Process Analysis
+    Backend->>Mobile: Return Analysis Results
+    Mobile->>User: Display Analysis Results
+    
+    Note over Backend: Analytics Tracking
+    Mobile->>Backend: POST /api/analytics/events
+    Backend->>Backend: Store User Interaction Data
+```
+
+### Subscription Upgrade Flow
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Mobile as Mobile App
+    participant Backend as Backend Server
+    participant Payment as Payment Gateway
+    
+    User->>Mobile: View Subscription Options
+    Mobile->>Backend: GET /api/subscriptions/plans
+    Backend->>Mobile: Return Available Plans
+    Mobile->>User: Display Subscription Plans
+    
+    User->>Mobile: Select Premium Plan
+    Mobile->>Payment: Process Payment
+    Payment->>Mobile: Payment Confirmation
+    Mobile->>Backend: POST /api/users/subscription
+    Backend->>Backend: Update Subscription Status
+    Backend->>Backend: Trigger Subscription Workflow
+    
+    Backend->>Mobile: Return Updated User Data
+    Mobile->>User: Show Subscription Confirmation
+    
+    Backend->>Backend: Generate Premium Welcome Pack
+    Backend->>Mobile: Send Welcome Notification
+    Mobile->>User: Show Premium Features Unlocked
+```
+
+## Internal System Interactions
+
+### Content Generation Process
+
+```mermaid
+flowchart TD
+    subgraph Scheduler
+        Cron[Cron Job] --> ContentGen[Content Generation Job]
+    end
+    
+    subgraph Backend Server
+        ContentGen --> UserSegmentation[User Segmentation]
+        UserSegmentation --> BatchProcessor[Batch Processor]
+        BatchProcessor --> ContentService[Content Service]
+        ContentService --> TemplateEngine[Template Engine]
+        ContentService --> AstroEngineClient[Astro Engine Client]
+        ContentService --> AstroRatanClient[Astro Ratan Client]
+        TemplateEngine --> ContentFormatter[Content Formatter]
+        AstroEngineClient --> ChartProcessor[Chart Processor]
+        AstroRatanClient --> AIContentGenerator[AI Content Generator]
+        ChartProcessor --> ContentAssembler[Content Assembler]
+        AIContentGenerator --> ContentAssembler
+        ContentFormatter --> ContentAssembler
+        ContentAssembler --> ContentStorage[Content Storage]
+        ContentStorage --> NotificationTrigger[Notification Trigger]
+    end
+    
+    subgraph External Services
+        AstroEngineClient --> AstroEngine[Astro Engine API]
+        AstroRatanClient --> AstroRatan[Astro Ratan AI API]
+        NotificationTrigger --> NotificationService[Notification Service]
+    end
+    
+    AstroEngine --> AstroEngineClient
+    AstroRatan --> AstroRatanClient
+    NotificationService --> PushDelivery[Push Notification Delivery]
+```
+
+### Real-time Analytics Processing
+
+```mermaid
+flowchart TD
+    subgraph Client
+        MobileApp[Mobile App] --> EventTracking[Event Tracking]
+        EventTracking --> BatchSender[Batch Event Sender]
+    end
+    
+    subgraph Backend Server
+        APIGateway[API Gateway] --> EventCollector[Event Collector]
+        EventCollector --> Validator[Event Validator]
+        Validator --> EventEnricher[Event Enricher]
+        EventEnricher --> EventRouter[Event Router]
+        
+        EventRouter --> RealtimeProcessor[Realtime Processor]
+        EventRouter --> BatchProcessor[Batch Processor]
+        EventRouter --> StreamProcessor[Stream Processor]
+        
+        RealtimeProcessor --> AlertingSystem[Alerting System]
+        BatchProcessor --> AnalyticsDB[Analytics Database]
+        StreamProcessor --> DataWarehouse[Data Warehouse]
+        
+        AnalyticsDB --> ReportGenerator[Report Generator]
+        DataWarehouse --> MLPipeline[ML Pipeline]
+        
+        ReportGenerator --> DashboardAPI[Dashboard API]
+        MLPipeline --> PredictionService[Prediction Service]
+    end
+    
+    subgraph Admin Interface
+        DashboardAPI --> AnalyticsDashboard[Analytics Dashboard]
+        PredictionService --> RecommendationEngine[Recommendation Engine]
+    end
+    
+    BatchSender --> APIGateway
+```
+
+### Error Handling & Recovery Flow
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant API as API Gateway
+    participant Service as Service Layer
+    participant ErrorHandler as Error Handler
+    participant Logger as Logging Service
+    participant Monitoring as Monitoring System
+    participant Notification as Alert Notification
+    
+    Client->>API: API Request
+    API->>Service: Process Request
+    
+    alt Successful Case
+        Service->>API: Success Response
+        API->>Client: 200 OK with Data
+    else Error Case
+        Service->>ErrorHandler: Throw Exception
+        ErrorHandler->>ErrorHandler: Classify Error
+        ErrorHandler->>Logger: Log Error Details
+        Logger->>Monitoring: Update Error Metrics
+        
+        alt Critical Error
+            Monitoring->>Notification: Send Alert
+            Notification->>Notification: Notify On-Call Engineer
+        end
+        
+        ErrorHandler->>API: Formatted Error Response
+        API->>Client: Error Response with Code
+        
+        alt Recoverable Error
+            ErrorHandler->>Service: Trigger Recovery Process
+            Service->>Service: Execute Recovery Steps
+            Service->>Logger: Log Recovery Attempt
+        end
+    end
+```
+
+### Deployment Architecture
+
+```mermaid
+flowchart TD
+    subgraph Development
+        DevEnv[Development Environment]
+        LocalTests[Local Tests]
+        DevEnv --> LocalTests
+    end
+    
+    subgraph CI/CD Pipeline
+        GitRepo[Git Repository] --> GithubActions[GitHub Actions]
+        GithubActions --> BuildStep[Build Step]
+        BuildStep --> TestStep[Test Step]
+        TestStep --> SecurityScan[Security Scan]
+        SecurityScan --> DockerBuild[Docker Build]
+    end
+    
+    subgraph Staging Environment
+        DockerBuild --> StagingDeploy[Staging Deployment]
+        StagingDeploy --> IntegrationTests[Integration Tests]
+        IntegrationTests --> LoadTests[Load Tests]
+        LoadTests --> UAT[User Acceptance Testing]
+    end
+    
+    subgraph Production Environment
+        UAT --> BlueGreen[Blue-Green Deployment]
+        BlueGreen --> LoadBalancer[Load Balancer]
+        LoadBalancer --> ProdServer1[Production Server 1]
+        LoadBalancer --> ProdServer2[Production Server 2]
+        LoadBalancer --> ProdServerN[Production Server N]
+        
+        ProdServer1 --> Redis[Redis Cache]
+        ProdServer2 --> Redis
+        ProdServerN --> Redis
+        
+        ProdServer1 --> DBCluster[Database Cluster]
+        ProdServer2 --> DBCluster
+        ProdServerN --> DBCluster
+        
+        DBCluster --> PrimaryDB[(Primary DB)]
+        DBCluster --> ReplicaDB1[(Replica DB 1)]
+        DBCluster --> ReplicaDB2[(Replica DB 2)]
+    end
+    
+    subgraph Monitoring & Ops
+        ProdServer1 --> Prometheus[Prometheus]
+        ProdServer2 --> Prometheus
+        ProdServerN --> Prometheus
+        Prometheus --> Grafana[Grafana Dashboards]
+        Prometheus --> AlertManager[Alert Manager]
+        AlertManager --> PagerDuty[PagerDuty]
+    end
+```
+
+### Security Flow & Authentication
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Client
+    participant API as API Gateway
+    participant Auth as Auth Service
+    participant JWT as JWT Processor
+    participant RBAC as Role-Based Access Control
+    participant Service as Protected Service
+    participant Audit as Audit Logger
+    
+    User->>Client: Enter Credentials
+    Client->>API: POST /api/auth/login
+    API->>Auth: Validate Credentials
+    Auth->>Auth: Check Rate Limiting
+    Auth->>Auth: Validate Username/Password
+    Auth->>JWT: Generate Tokens
+    JWT->>JWT: Create Access Token
+    JWT->>JWT: Create Refresh Token
+    JWT->>Auth: Return Tokens
+    Auth->>API: Return Auth Response
+    API->>Client: Return JWT Tokens
+    Client->>Client: Store Tokens Securely
+    
+    Note over User,Client: Later - Authenticated Request
+    
+    User->>Client: Request Protected Resource
+    Client->>API: Request with JWT Header
+    API->>JWT: Validate Token
+    JWT->>JWT: Check Signature
+    JWT->>JWT: Verify Not Expired
+    JWT->>RBAC: Check Permissions
+    RBAC->>RBAC: Verify User Role
+    RBAC->>RBAC: Check Resource Access
+    RBAC->>Service: Allow Access
+    Service->>Audit: Log Access
+    Service->>API: Return Protected Data
+    API->>Client: Return Response
+    Client->>User: Show Protected Resource
+    
+    Note over User,Client: Token Refresh Flow
+    
+    Client->>API: POST /api/auth/refresh
+    API->>JWT: Validate Refresh Token
+    JWT->>JWT: Verify Refresh Token
+    JWT->>JWT: Generate New Access Token
+    JWT->>API: Return New Access Token
+    API->>Client: Return New JWT
+    Client->>Client: Update Stored Token
+```
+
+### Offline Data Synchronization
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Client
+    participant SyncManager as Sync Manager
+    participant LocalDB as Local Database
+    participant API as Backend API
+    participant ServerDB as Server Database
+    
+    Note over User,Client: Online Operation
+    
+    User->>Client: Perform Action
+    Client->>API: Send Request
+    API->>ServerDB: Update Data
+    ServerDB->>API: Confirm Update
+    API->>Client: Success Response
+    Client->>LocalDB: Update Local Data
+    Client->>User: Show Updated UI
+    
+    Note over User,Client: Connection Lost
+    
+    User->>Client: Perform Action Offline
+    Client->>SyncManager: Queue Operation
+    SyncManager->>LocalDB: Store Pending Change
+    SyncManager->>LocalDB: Update Optimistic UI
+    LocalDB->>Client: Return Updated Data
+    Client->>User: Show Updated UI (Offline)
+    
+    Note over User,Client: Connection Restored
+    
+    SyncManager->>SyncManager: Detect Connection
+    SyncManager->>SyncManager: Process Queue
+    SyncManager->>API: Sync Pending Changes
+    API->>ServerDB: Apply Changes
+    ServerDB->>API: Confirm Updates
+    API->>SyncManager: Sync Response
+    SyncManager->>LocalDB: Update Sync Status
+    SyncManager->>LocalDB: Resolve Conflicts
+    LocalDB->>Client: Update UI if needed
+    Client->>User: Show Sync Status
+```
+
+### A/B Testing Workflow
+
+```mermaid
+flowchart TD
+    subgraph Admin Panel
+        CreateTest[Create A/B Test] --> DefineVariants[Define Variants]
+        DefineVariants --> SetDistribution[Set Traffic Distribution]
+        SetDistribution --> DefineMetrics[Define Success Metrics]
+        DefineMetrics --> ActivateTest[Activate Test]
+    end
+    
+    subgraph Backend Server
+        ActivateTest --> TestStorage[Test Configuration Storage]
+        TestStorage --> AssignmentService[Variant Assignment Service]
+        AssignmentService --> UserAssignment[User Assignment Logic]
+        UserAssignment --> PersistAssignment[Persist Assignment]
+        PersistAssignment --> TrackExposure[Track Exposure Event]
+    end
+    
+    
+    subgraph Mobile App
+        AppRequest[App Request] --> CheckVariant[Check Variant Assignment]
+        CheckVariant --> RenderVariantA[Render Variant A]
+        CheckVariant --> RenderVariantB[Render Variant B]
+        RenderVariantA --> TrackInteraction[Track Interaction]
+        RenderVariantB --> TrackInteraction
+        TrackInteraction --> TrackConversion[Track Conversion]
+    end
+    
+    subgraph Analytics
+        TrackExposure --> AnalyticsStorage[Analytics Storage]
+        TrackInteraction --> AnalyticsStorage
+        TrackConversion --> AnalyticsStorage
+        AnalyticsStorage --> AnalysisEngine[Analysis Engine]
+        AnalysisEngine --> ResultsDashboard[Results Dashboard]
+        ResultsDashboard --> StatSignificance[Statistical Significance Check]
+        StatSignificance --> TestConclusion[Test Conclusion]
+    end
+    
+    AppRequest --> AssignmentService
+```
 
 ## Comprehensive Documentation
 
