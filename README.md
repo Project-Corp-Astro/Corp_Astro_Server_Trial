@@ -17,20 +17,49 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-4.9.5-blue.svg)](https://www.typescriptlang.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-18.x-green.svg)](https://nodejs.org/)
 [![Express](https://img.shields.io/badge/Express-4.18.2-lightgrey.svg)](https://expressjs.com/)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-14.x-blue.svg)](https://www.postgresql.org/)
-[![Sequelize](https://img.shields.io/badge/Sequelize-6.x-orange.svg)](https://sequelize.org/)
+[![Firebase](https://img.shields.io/badge/Firebase-9.x-orange.svg)](https://firebase.google.com/)
+[![Supabase](https://img.shields.io/badge/Supabase-1.x-green.svg)](https://supabase.io/)
 
 </div>
 
-## 📋 Overview
+## 📖 Table of Contents
+
+1. [Introduction](#introduction)
+2. [System Architecture](#system-architecture)
+3. [Key Features](#key-features)
+4. [User Flows](#user-flows)
+5. [Core Components](#core-components)
+   - [Authentication System](#authentication-system)
+   - [Push Notification System](#push-notification-system)
+   - [Webhooks System](#webhooks-system)
+   - [Workflow Engine](#workflow-engine)
+   - [Analytics System](#analytics-system)
+6. [Database Architecture](#database-architecture)
+7. [API Reference](#api-reference)
+8. [Integration Points](#integration-points)
+9. [Deployment](#deployment)
+10. [Documentation](#documentation)
+11. [Contributing](#contributing)
+12. [Security](#security)
+13. [License](#license)
+
+## 📕 Introduction
+
+### 📋 Overview
 
 The Corp Astro Backend Server provides the foundation for the Corp Astro mobile application, delivering corporate astrology services, personalized content, and business astrological insights. This server is built with TypeScript and follows modern backend development practices to ensure scalability, maintainability, and performance.
 
 ### 🌟 What is Corp Astro?
 
-Corp Astro is a comprehensive astrology platform focused on corporate and business astrology. It helps business owners and entrepreneurs make informed decisions based on astrological insights tailored specifically for business contexts. The platform offers various features across different subscription tiers, from free basic tools to premium personalized consultations.
+Corp Astro is a comprehensive astrology platform focused on corporate and business astrology. It helps business owners and entrepreneurs make informed decisions based on astrological insights tailored specifically for business contexts. The platform offers various features across different subscription tiers:
+
+- **Free Tier**: Basic tools like name number analysis, tagline analysis, and brand color analysis
+- **Subscription Tier**: Personalized daily horoscopes, do's and don'ts, monthly reports, and Astro Ratan chat access
+- **Premium Tier**: Appointments with human astrology specialists for personalized business guidance
 
 ### 🧩 Project Components
+
+The Corp Astro ecosystem consists of five main components that work together to deliver corporate astrology services:
 
 ```mermaid
 graph TD
@@ -44,11 +73,13 @@ graph TD
 
 1. **Corp Astro Mobile Application**: The primary client interface for users to access corporate astrology services
 2. **Corp Astro Backend Server** (this repository): Provides APIs, content generation, and business logic
-3. **Super Admin Panel (SAP)**: Web-based administration interface for content management and analytics (developed separately)
-4. **Astro Ratan**: AI agent built using OpenAI Assistant APIs, trained on astrology texts for personalized guidance
-5. **Astro Engine**: Core calculation component generating charts and predictions using Swiss Ephemeris with sidereal zodiac system, whole sign system, and lahiri ayanamsa
+3. **Astro Engine**: Core calculation component generating charts and predictions using Swiss Ephemeris with sidereal zodiac system, whole sign system, and lahiri ayanamsa
+4. **Astro Ratan AI**: AI agent built using OpenAI Assistant APIs, trained on astrology texts for personalized guidance
+5. **Super Admin Panel (SAP)**: Web-based administration interface for content management and analytics (developed separately)
 
-### 🏗️ System Architecture
+## 🏗️ System Architecture
+
+The Corp Astro Backend Server follows a modular, service-oriented architecture designed for scalability, maintainability, and performance. The system is divided into distinct layers, each with specific responsibilities:
 
 ```mermaid
 graph TD
@@ -83,9 +114,9 @@ graph TD
     end
 
     subgraph "Data Layer"
-        Database[(PostgreSQL)]
-        FileStorage[(File Storage)]
-        AnalyticsDB[(Analytics DB)]
+        Supabase[(Supabase)]
+        Firebase[(Firebase)]
+        Redis[(Redis)]
     end
 
     MobileApp --> APIGateway
@@ -105,13 +136,13 @@ graph TD
     ServiceLayer --> WebhookService
     ServiceLayer --> WorkflowService
 
-    UserService --> Database
-    ContentService --> Database
-    BusinessService --> Database
-    NotificationService --> Database
-    AnalyticsService --> AnalyticsDB
-    WebhookService --> Database
-    WorkflowService --> Database
+    UserService --> Supabase
+    ContentService --> Supabase
+    BusinessService --> Supabase
+    NotificationService --> Firebase
+    AnalyticsService --> Firebase
+    WebhookService --> Supabase
+    WorkflowService --> Supabase
 
     ContentService --> AstroEngine
     ContentService --> AstroRatan
@@ -119,102 +150,155 @@ graph TD
     NotificationService --> Queue
     WebhookService --> Queue
 
-    UserService --> Cache
-    ContentService --> Cache
-    BusinessService --> Cache
-    ContentService --> FileStorage
+    UserService --> Redis
+    ContentService --> Redis
+    BusinessService --> Redis
 
     style APIGateway fill:#f9f,stroke:#333,stroke-width:2px
-    style Database fill:#bbf,stroke:#333,stroke-width:2px
+    style Supabase fill:#bbf,stroke:#333,stroke-width:2px
+    style Firebase fill:#ffb,stroke:#333,stroke-width:2px
     style AstroEngine fill:#bfb,stroke:#333,stroke-width:2px
     style AstroRatan fill:#bfb,stroke:#333,stroke-width:2px
 ```
 
-The Corp Astro Backend Server follows a modular, service-oriented architecture designed for scalability, maintainability, and performance. The system is divided into distinct layers, each with specific responsibilities:
+### Architecture Layers
 
-### 🚀 Key Features
+1. **Client Layer**: Interfaces that interact with the backend server
+2. **API Gateway Layer**: Handles incoming requests, authentication, and routing
+3. **Service Layer**: Core business logic and feature implementations
+4. **Integration Layer**: Connections to external services and components
+5. **Data Layer**: Polyglot persistence using Supabase, Firebase, and Redis
 
-<table>
-  <tr>
-    <td width="50%">
-      <h4>🔮 Content Generation System</h4>
-      <ul>
-        <li>Daily horoscopes tailored for business contexts</li>
-        <li>Monthly business forecast reports</li>
-        <li>Personalized content based on user's birth chart</li>
-        <li>Content delivery based on subscription tier</li>
-      </ul>
-    </td>
-    <td width="50%">
-      <h4>💰 Subscription Tier Management</h4>
-      <ul>
-        <li><b>Free Tier:</b> Basic tools and limited content</li>
-        <li><b>Basic Tier:</b> Daily horoscopes, monthly reports, Astro Ratan chat</li>
-        <li><b>Premium Tier:</b> All features plus business forecasts and human consultations</li>
-        <li>Seamless subscription handling with secure payment processing</li>
-      </ul>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <h4>💼 Business Astrology Features</h4>
-      <ul>
-        <li>Business natal charts based on founding date/time</li>
-        <li>Strategic timing recommendations for business decisions</li>
-        <li>Team compatibility analysis</li>
-        <li>Detailed business profile management</li>
-      </ul>
-    </td>
-    <td>
-      <h4>🔧 Free Tools</h4>
-      <ul>
-        <li>Business name numerology analysis using Chaldean system</li>
-        <li>Tagline compatibility checking</li>
-        <li>Brand color analysis and recommendations</li>
-        <li>Basic business compatibility assessments</li>
-      </ul>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <h4>📊 Analytics System</h4>
-      <ul>
-        <li>Comprehensive user behavior tracking</li>
-    </td>
-    <td width="33%" align="center">
-      <h4>📱 Mobile Optimizations</h4>
-      <p>Batch processing, response compression, and offline support</p>
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <h4>📨 Push Notifications</h4>
-      <p>Cross-platform push notification delivery system</p>
-    </td>
-    <td align="center">
-      <h4>🔄 Webhooks</h4>
-      <p>Real-time integration with external systems</p>
-    </td>
-    <td align="center">
-      <h4>⚙️ Workflow Engine</h4>
-      <p>Automated business processes and content generation</p>
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <h4>💼 Business Analysis</h4>
-      <p>Corporate astrological insights and recommendations</p>
-    </td>
-    <td align="center">
-      <h4>📈 Scalability</h4>
-      <p>Horizontal scaling with load balancing and clustering</p>
-    </td>
-    <td align="center">
-      <h4>🔍 Monitoring</h4>
-      <p>Comprehensive logging and performance monitoring</p>
-    </td>
-  </tr>
-</table>
+## 🧩 Core Components
+
+The Corp Astro Backend Server is built around several core components that work together to deliver a comprehensive corporate astrology platform:
+
+### 🔐 Authentication System
+
+```mermaid
+flowchart LR
+    User[User] -->|Credentials| Auth[Authentication API]
+    Auth -->|Validate| UserDB[(User Database)]
+    Auth -->|Generate| JWT[JWT Token]
+    JWT -->|Store| Redis[(Redis Cache)]
+    JWT -->|Return| User
+    
+    User -->|Token| Protected[Protected Resources]
+    Protected -->|Verify| JWT
+    JWT -->|Authorize| Protected
+    
+    subgraph RoleBasedAccess
+        Admin[Admin Role]
+        Premium[Premium Role]
+        Basic[Basic Role]
+        Free[Free Role]
+    end
+    
+    JWT -->|Contains| RoleBasedAccess
+```
+
+Our authentication system uses JWT-based authentication with role-based access control. For detailed implementation, see the [Authentication Guide](/docs/authentication-guide.md).
+
+### 📨 Push Notification System
+
+```mermaid
+flowchart TD
+    Backend[Backend Server] -->|Queue Notification| NotificationService[Notification Service]
+    NotificationService -->|Format Payload| FCM[Firebase Cloud Messaging]
+    NotificationService -->|Format Payload| APNS[Apple Push Notification Service]
+    
+    FCM -->|Deliver| AndroidDevices[Android Devices]
+    APNS -->|Deliver| iOSDevices[iOS Devices]
+    
+    subgraph NotificationTypes
+        ContentNotif[Content Updates]
+        ReminderNotif[Reminders]
+        PromoNotif[Promotional]
+        TransactionalNotif[Transactional]
+    end
+    
+    NotificationTypes --> NotificationService
+```
+
+Our push notification system supports both Android and iOS devices through Firebase Cloud Messaging and Apple Push Notification Service. For detailed implementation, see the [Push Notification Guide](/docs/push-notification-guide.md).
+
+### 🔄 Webhooks System
+
+```mermaid
+flowchart TD
+    Event[System Event] -->|Trigger| WebhookService[Webhook Service]
+    WebhookService -->|Check| WebhookConfig[(Webhook Configuration)]
+    WebhookService -->|Queue| DeliveryQueue[Delivery Queue]
+    DeliveryQueue -->|Process| WebhookWorker[Webhook Worker]
+    WebhookWorker -->|HTTP POST| Endpoint[Customer Endpoint]
+    WebhookWorker -->|Record| DeliveryLog[(Delivery Log)]
+    
+    subgraph RetryMechanism
+        RetryQueue[Retry Queue]
+        BackoffStrategy[Exponential Backoff]
+    end
+    
+    Endpoint -->|Failure| RetryMechanism
+    RetryMechanism --> WebhookWorker
+```
+
+Our webhooks system allows external systems to receive real-time updates about events in the Corp Astro platform. For detailed implementation, see the [Webhooks Guide](/docs/webhooks-guide.md).
+
+### ⚙️ Workflow Engine
+
+```mermaid
+flowchart TD
+    Trigger[Trigger Event] -->|Start| WorkflowEngine[Workflow Engine]
+    WorkflowEngine -->|Load| WorkflowDefinition[(Workflow Definition)]
+    WorkflowEngine -->|Execute| WorkflowInstance[Workflow Instance]
+    WorkflowInstance -->|Process| Steps[Workflow Steps]
+    Steps -->|Complete| Notification[Notification]
+    
+    subgraph StepTypes
+        ContentGeneration[Content Generation]
+        DataProcessing[Data Processing]
+        NotificationSending[Notification Sending]
+        ExternalAPICall[External API Call]
+    end
+    
+    Steps --> StepTypes
+```
+
+Our workflow engine automates business processes and content generation within the Corp Astro platform. For detailed implementation, see the [Workflows Guide](/docs/workflows-guide.md).
+
+### 📊 Analytics System
+
+```mermaid
+flowchart TD
+    MobileApp[Mobile App] -->|Track Event| EventCollection[Event Collection API]
+    SAP[Super Admin Panel] -->|View Reports| AnalyticsDashboard[Analytics Dashboard]
+    
+    EventCollection --> EventProcessing[Event Processing]
+    EventProcessing --> Supabase[Supabase Database]
+    EventProcessing --> Firebase[Firebase Realtime Database]
+    Supabase --> AnalyticsEngine[Analytics Engine]
+    Firebase --> AnalyticsEngine
+    AnalyticsEngine --> AnalyticsDashboard
+    
+    subgraph EventTypes
+        UserEvents[User Events]
+        ContentEvents[Content Events]
+        BusinessEvents[Business Events]
+        SubscriptionEvents[Subscription Events]
+    end
+    
+    subgraph AnalyticsFeatures
+        Segmentation[User Segmentation]
+        Funnels[Conversion Funnels]
+        Retention[Retention Analysis]
+        ABTesting[A/B Testing]
+    end
+    
+    EventTypes --> EventCollection
+    AnalyticsEngine --> AnalyticsFeatures
+```
+
+Our analytics system tracks user behavior and system events to provide insights for business decisions. For detailed implementation, see the [Analytics Guide](/docs/analytics-ab-testing-guide.md).
 
 ## 🔒 Authentication System
 
@@ -262,7 +346,7 @@ flowchart TD
     FCM -->|Deliver| Android[Android Devices]
     APNS -->|Deliver| iOS[iOS Devices]
     
-    subgraph Notification Types
+    subgraph NotificationTypes
         Daily[Daily Horoscopes]
         Monthly[Monthly Reports]
         Business[Business Alerts]
@@ -270,14 +354,14 @@ flowchart TD
         Subscription[Subscription Alerts]
     end
     
-    subgraph Notification Service
+    subgraph NotificationService
         Queue[Message Queue]
         Templates[Notification Templates]
         Scheduler[Notification Scheduler]
         Analytics[Delivery Analytics]
     end
     
-    Notification Types --> NotificationService
+    NotificationTypes --> NotificationService
 ```
 
 The push notification system enables real-time communication with mobile app users through:
@@ -382,25 +466,27 @@ flowchart TD
     SAP[Super Admin Panel] -->|View Reports| AnalyticsDashboard[Analytics Dashboard]
     
     EventCollection --> EventProcessing[Event Processing]
-    EventProcessing --> EventStorage[Event Storage]
-    EventStorage --> AnalyticsEngine[Analytics Engine]
+    EventProcessing --> Supabase[Supabase Database]
+    EventProcessing --> Firebase[Firebase Realtime Database]
+    Supabase --> AnalyticsEngine[Analytics Engine]
+    Firebase --> AnalyticsEngine
     AnalyticsEngine --> AnalyticsDashboard
     
-    subgraph Event Types
+    subgraph EventTypes
         UserEvents[User Events]
         ContentEvents[Content Events]
         BusinessEvents[Business Events]
         SubscriptionEvents[Subscription Events]
     end
     
-    subgraph Analytics Features
+    subgraph AnalyticsFeatures
         Segmentation[User Segmentation]
         Funnels[Conversion Funnels]
         Retention[Retention Analysis]
         ABTesting[A/B Testing]
     end
     
-    Event Types --> EventCollection
+    EventTypes --> EventCollection
     AnalyticsEngine --> AnalyticsFeatures
 ```
 
@@ -425,6 +511,10 @@ The A/B testing framework enables:
 For detailed implementation, see the [Analytics System Guide](/docs/analytics-system.md).
 
 ## 🔌 Integration Points
+
+The Corp Astro Backend Server integrates with several external systems and services to provide a comprehensive corporate astrology platform.
+
+### Integration Architecture
 
 ```mermaid
 flowchart TD
@@ -455,16 +545,20 @@ flowchart TD
     SDK <--> MobileApp[Mobile App]
 ```
 
-### Astro Engine Integration
+### Core System Integrations
 
-The Corp Astro Backend Server integrates with the Astro Engine for astrological calculations:
+#### 1. Astro Engine Integration
 
-- **Chart Generation**: Request natal, transit, and composite charts
-- **Prediction Calculations**: Generate predictions based on transits and progressions
-- **Dasha Calculations**: Calculate Vimshottari Dasha periods
-- **Compatibility Analysis**: Calculate business compatibility between entities
+The Astro Engine provides core astrological calculations for the platform:
 
-Example integration code:
+| Feature | Description |
+|---------|-------------|
+| **Chart Generation** | Request natal, transit, and composite charts |
+| **Prediction Calculations** | Generate predictions based on transits and progressions |
+| **Dasha Calculations** | Calculate Vimshottari Dasha periods |
+| **Compatibility Analysis** | Calculate business compatibility between entities |
+
+**Integration Method**: REST API with API key authentication
 
 ```typescript
 // Example: Requesting a business natal chart from Astro Engine
@@ -502,16 +596,18 @@ async function generateBusinessChart(businessId: string): Promise<ChartData> {
 }
 ```
 
-### Astro Ratan AI Integration
+#### 2. Astro Ratan AI Integration
 
-The backend server integrates with Astro Ratan AI for personalized astrological guidance:
+Astro Ratan AI provides personalized astrological guidance through natural language processing:
 
-- **Content Generation**: Generate personalized horoscopes and reports
-- **Business Insights**: Generate business-specific astrological insights
-- **User Queries**: Process natural language queries about astrological matters
-- **Personalized Recommendations**: Generate tailored recommendations based on charts
+| Feature | Description |
+|---------|-------------|
+| **Content Generation** | Generate personalized horoscopes and reports |
+| **Business Insights** | Generate business-specific astrological insights |
+| **User Queries** | Process natural language queries about astrological matters |
+| **Personalized Recommendations** | Generate tailored recommendations based on charts |
 
-Example integration code:
+**Integration Method**: Message Queue and REST API with OpenAI API key authentication
 
 ```typescript
 // Example: Generating personalized content with Astro Ratan AI
@@ -566,114 +662,222 @@ async function generatePersonalizedContent(
 }
 ```
 
-### Super Admin Panel (SAP) Integration
+#### 3. Super Admin Panel (SAP) Integration
 
-The backend server integrates with the Super Admin Panel for administration and analytics:
+The Super Admin Panel provides administrative capabilities for the platform:
 
-- **User Management**: Manage user accounts and subscriptions
-- **Content Management**: Create and manage content
-- **Analytics Dashboard**: View analytics data and reports
-- **A/B Test Management**: Create and monitor A/B tests
-- **System Configuration**: Configure system settings
+| Feature | Description |
+|---------|-------------|
+| **User Management** | Manage user accounts and subscriptions |
+| **Content Management** | Create and manage content |
+| **Analytics Dashboard** | View analytics data and reports |
+| **A/B Test Management** | Create and monitor A/B tests |
+| **System Configuration** | Configure system settings |
+
+**Integration Method**: REST API and Webhooks with JWT authentication
+
+### External Service Integrations
+
+| Service | Purpose | Integration Method |
+|---------|---------|--------------------|
+| **Payment Processors** | Handle subscription payments | Webhooks |
+| **Push Notification Services** | Deliver notifications to mobile devices | SDK |
+| **Email Service Providers** | Send transactional emails | REST API |
+| **Analytics Platforms** | Track user behavior | SDK |
 
 For detailed implementation of all integration points, see the [Integration Guide](/docs/integration-guide.md).
 
-## 🗄️ Database Schema
+## 🔍 Database Architecture
+
+The Corp Astro Backend Server uses a polyglot database architecture to leverage the strengths of different database technologies for optimal performance and scalability.
+
+### Polyglot Architecture Overview
 
 ```mermaid
-erDiagram
-    USERS ||--o{ USER_DEVICES : has
-    USERS ||--o{ BUSINESSES : owns
-    USERS ||--o{ SUBSCRIPTIONS : has
-    USERS ||--o{ USER_PREFERENCES : has
-    BUSINESSES ||--o{ BUSINESS_ANALYSES : has
-    USERS ||--o{ REPORTS : receives
-    USERS ||--o{ NOTIFICATIONS : receives
-    USERS ||--o{ ANALYTICS_EVENTS : generates
-    REPORTS ||--o{ REPORT_SECTIONS : contains
-    ANALYTICS_EVENTS ||--o{ EVENT_PROPERTIES : has
-    USERS ||--o{ AB_TEST_ASSIGNMENTS : participates
-    AB_TESTS ||--o{ AB_TEST_VARIANTS : has
-    AB_TESTS ||--o{ AB_TEST_ASSIGNMENTS : assigns
-    WEBHOOKS ||--o{ WEBHOOK_DELIVERIES : triggers
-    WORKFLOWS ||--o{ WORKFLOW_EXECUTIONS : executes
-    WORKFLOW_EXECUTIONS ||--o{ WORKFLOW_EXECUTION_STEPS : contains
+flowchart TD
+    subgraph "Polyglot Database Architecture"
+        subgraph "Supabase"
+            PostgreSQL["PostgreSQL"] -- "Extension" --> TimescaleDB["TimescaleDB"]
+            PostgreSQL -- "Core Data" --> UserData["User Data"]
+            PostgreSQL -- "Business Data" --> BusinessData["Business Data"]
+            PostgreSQL -- "Subscription Data" --> SubscriptionData["Subscription Data"]
+            TimescaleDB -- "Time Series Data" --> PlanetaryPositions["Planetary Positions"]
+        end
+
+        subgraph "Firebase"
+            RealtimeDB["Realtime Database"] -- "Real-time Data" --> UserSessions["User Sessions"]
+            Firestore["Firestore"] -- "Document Data" --> AstrologicalCharts["Astrological Charts"]
+            Firestore -- "Document Data" --> ConversationLogs["Astro Ratan Conversations"]
+            FirebaseAnalytics["Firebase Analytics"] -- "Event Tracking" --> UserEvents["User Events"]
+        end
+
+        subgraph "Redis"
+            Cache["Redis Cache"] -- "Caching" --> FrequentCalculations["Frequent Calculations"]
+            Cache -- "Caching" --> SessionData["Session Data"]
+            Cache -- "Pub/Sub" --> Notifications["Notifications"]
+        end
+    end
+
+    Backend["Backend Server"] --> Supabase
+    Backend --> Firebase
+    Backend --> Redis
 ```
 
-The Corp Astro Backend Server uses PostgreSQL as its primary database with a well-structured schema:
+### Database Technologies
 
-### Core Tables
+#### Supabase (PostgreSQL)
 
-- **users**: Stores user account information and authentication details
-- **businesses**: Stores business profiles for corporate astrology
-- **subscriptions**: Tracks user subscription plans and billing
-- **reports**: Stores generated astrological reports
+Supabase provides our relational database foundation with PostgreSQL:
 
-### Feature-Specific Tables
+- **Core User Data**: User profiles, authentication, and preferences
+- **Business Data**: Business profiles and relationship charts
+- **Subscription Management**: Plans, transactions, and billing records
+- **TimescaleDB Extension**: Optimized storage for planetary positions and time-series data
 
-- **analytics_events**: Stores user behavior and system events
-- **notifications**: Tracks push notifications sent to users
-- **webhooks**: Stores webhook configurations and delivery logs
-- **workflows**: Stores workflow definitions and execution logs
+#### Firebase
 
-For a complete database schema with all tables, relationships, and indexes, see the [Database Schema Documentation](/docs/database-schema.md).
+Firebase provides flexible NoSQL storage and real-time capabilities:
+
+- **Firestore**: Document-oriented storage for astrological charts and Astro Ratan conversations
+- **Realtime Database**: Real-time data synchronization for collaborative features
+- **Firebase Analytics**: Event tracking and user behavior analysis
+- **Firebase Authentication**: Complementary authentication services
+
+#### Redis
+
+Redis serves as our high-performance caching layer:
+
+- **Caching Layer**: High-performance caching for frequent astrological calculations
+- **Session Management**: Storing session data and authentication tokens
+- **Pub/Sub Capabilities**: Real-time notifications and event broadcasting
+
+### Advantages of Polyglot Architecture
+
+1. **Optimized Performance**: Each data type is stored in the most suitable database technology
+2. **Scalability**: Different components can scale independently based on demand
+3. **Flexibility**: Easier adaptation to changing requirements and new features
+4. **Real-time Capabilities**: Native support for real-time updates and notifications
+
+For detailed information about the database schema and implementation, see the [Database Architecture Documentation](/docs/database-schema.md).
 
 ## 🌐 API Reference
 
+The Corp Astro Backend Server exposes a comprehensive RESTful API for client applications to interact with. All endpoints are versioned and follow consistent patterns for request/response handling.
+
+### API Architecture
+
 ```mermaid
-graph TD
-    subgraph "API Categories"
-        Auth[Authentication API]
-        User[User API]
-        Content[Content API]
-        Business[Business API]
-        Analytics[Analytics API]
-        Notification[Notification API]
-        Webhook[Webhook API]
-        Integration[Integration API]
-    end
+classDiagram
+    class UserController {
+        +register(req, res)
+        +login(req, res)
+        +refreshToken(req, res)
+        +getProfile(req, res)
+        +updateProfile(req, res)
+    }
     
-    Client[Client Applications] --> Auth
-    Client --> User
-    Client --> Content
-    Client --> Business
-    Client --> Analytics
-    Client --> Notification
-    Client --> Webhook
-    Client --> Integration
+    class BusinessController {
+        +createBusiness(req, res)
+        +getBusiness(req, res)
+        +updateBusiness(req, res)
+        +deleteBusiness(req, res)
+        +getBusinessAnalysis(req, res)
+    }
+    
+    class ContentController {
+        +getDailyHoroscope(req, res)
+        +getMonthlyForecast(req, res)
+        +getPersonalizedContent(req, res)
+    }
+    
+    class SubscriptionController {
+        +createSubscription(req, res)
+        +getSubscription(req, res)
+        +updateSubscription(req, res)
+        +cancelSubscription(req, res)
+    }
+    
+    class WebhookController {
+        +registerWebhook(req, res)
+        +triggerWebhook(req, res)
+        +getWebhookDeliveries(req, res)
+    }
+    
+    class WorkflowController {
+        +createWorkflow(req, res)
+        +executeWorkflow(req, res)
+        +getWorkflowStatus(req, res)
+    }
+    
+    class AnalyticsController {
+        +trackEvent(req, res)
+        +getAnalyticsData(req, res)
+    }
 ```
 
-The Corp Astro Backend Server provides a comprehensive set of RESTful APIs:
+### API Endpoints by Domain
 
-### Authentication API
+#### User Management
 
-- `POST /api/auth/register` - Register a new user
-- `POST /api/auth/login` - Authenticate user and get JWT
-- `POST /api/auth/refresh` - Refresh JWT token
-- `POST /api/auth/forgot-password` - Request password reset
-- `GET /api/auth/me` - Get current user information
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/v1/users/register` | POST | Register a new user |
+| `/api/v1/users/login` | POST | Authenticate a user |
+| `/api/v1/users/refresh-token` | POST | Refresh an authentication token |
+| `/api/v1/users/profile` | GET | Get the current user's profile |
+| `/api/v1/users/profile` | PUT | Update the current user's profile |
 
-### Content API
+#### Business Management
 
-- `GET /api/content/horoscopes/daily` - Get daily horoscope
-- `GET /api/content/horoscopes/monthly` - Get monthly horoscope
-- `GET /api/content/reports` - List available reports
-- `GET /api/content/reports/:id` - Get specific report
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/v1/businesses` | POST | Create a new business |
+| `/api/v1/businesses/:id` | GET | Get a business by ID |
+| `/api/v1/businesses/:id` | PUT | Update a business |
+| `/api/v1/businesses/:id` | DELETE | Delete a business |
+| `/api/v1/businesses/:id/analysis` | GET | Get astrological analysis for a business |
 
-### Business API
+#### Content Delivery
 
-- `GET /api/business/profile` - Get business profile
-- `POST /api/business/profile` - Create business profile
-- `PUT /api/business/profile` - Update business profile
-- `GET /api/business/analysis` - Get business analysis
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/v1/content/daily-horoscope` | GET | Get daily horoscope |
+| `/api/v1/content/monthly-forecast` | GET | Get monthly forecast |
+| `/api/v1/content/personalized` | GET | Get personalized content |
 
-### Analytics API
+#### Subscription Management
 
-- `POST /api/analytics/events` - Track analytics event
-- `GET /api/analytics/dashboard` - Get analytics dashboard data
-- `GET /api/analytics/reports` - Get analytics reports
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/v1/subscriptions` | POST | Create a new subscription |
+| `/api/v1/subscriptions/:id` | GET | Get subscription details |
+| `/api/v1/subscriptions/:id` | PUT | Update a subscription |
+| `/api/v1/subscriptions/:id` | DELETE | Cancel a subscription |
 
-For a complete API reference with all endpoints, request/response formats, and examples, see the [API Reference Documentation](/docs/api-reference.md).
+#### Webhooks
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/v1/webhooks` | POST | Register a new webhook |
+| `/api/v1/webhooks/:id/trigger` | POST | Manually trigger a webhook |
+| `/api/v1/webhooks/:id/deliveries` | GET | Get webhook delivery history |
+
+#### Workflows
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/v1/workflows` | POST | Create a new workflow |
+| `/api/v1/workflows/:id/execute` | POST | Execute a workflow |
+| `/api/v1/workflows/:id/status` | GET | Get workflow execution status |
+
+#### Analytics
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/v1/analytics/events` | POST | Track an analytics event |
+| `/api/v1/analytics/data` | GET | Get analytics data (admin only) |
+
+For complete API documentation with request/response formats and examples, see the [API Reference Documentation](/docs/api-reference.md).
 
 #### Feature Implementation Status
 
@@ -2511,9 +2715,73 @@ Detailed deployment instructions are available in the [Deployment Guide](/docs/d
    docker run -p 3000:3000 --env-file .env corp-astro-server
    ```
 
-## User Flows & Interaction Diagrams
+## 🚀 Key Features
 
-### User Onboarding Flow
+The Corp Astro Backend Server provides a comprehensive set of features to support the mobile application and deliver corporate astrology services:
+
+### Core Features
+
+- **Authentication System**: JWT-based authentication with role-based access control
+- **Push Notification System**: Multi-platform push notification delivery via Firebase and APNS
+- **Webhooks System**: Configurable webhook triggers and delivery for third-party integrations
+- **Workflow Engine**: Customizable business process automation for content generation and delivery
+- **Analytics System**: Comprehensive event tracking and reporting with A/B testing capabilities
+
+### Business Features
+
+- **Content Generation**: Automated astrological content creation for daily horoscopes and reports
+- **Business Analysis**: Corporate astrological insights and recommendations based on business data
+- **User Management**: Complete user lifecycle management with tiered access control
+- **Subscription Handling**: Subscription tiers and billing integration with payment processors
+- **API Documentation**: Comprehensive API documentation with Swagger for third-party developers
+
+## 📈 User Flows
+
+The following diagram illustrates the primary user flows within the Corp Astro ecosystem:
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant MobileApp as Mobile App
+    participant Backend as Backend Server
+    participant AstroEngine as Astro Engine
+    participant AstroRatan as Astro Ratan AI
+    
+    User->>MobileApp: Open App
+    MobileApp->>Backend: Authentication Request
+    Backend->>MobileApp: JWT Token
+    
+    User->>MobileApp: Request Daily Horoscope
+    MobileApp->>Backend: Get Horoscope API Call
+    Backend->>AstroEngine: Calculate Planetary Positions
+    AstroEngine->>Backend: Planetary Data
+    Backend->>MobileApp: Personalized Horoscope
+    MobileApp->>User: Display Horoscope
+    
+    User->>MobileApp: Ask Business Question
+    MobileApp->>Backend: Forward Question
+    Backend->>AstroRatan: Process Question
+    AstroRatan->>Backend: Astrological Guidance
+    Backend->>MobileApp: Personalized Answer
+    MobileApp->>User: Display Answer
+    
+    User->>MobileApp: Request Business Analysis
+    MobileApp->>Backend: Analysis Request
+    Backend->>AstroEngine: Calculate Business Chart
+    AstroEngine->>Backend: Chart Data
+    Backend->>MobileApp: Business Analysis Report
+    MobileApp->>User: Display Report
+```
+
+### Key User Journeys
+
+1. **Authentication Flow**: User registration, login, and token refresh
+2. **Content Consumption**: Accessing daily horoscopes and personalized content
+3. **AI Interaction**: Conversing with Astro Ratan AI for business guidance
+4. **Business Analysis**: Submitting business data for astrological analysis
+5. **Subscription Management**: Upgrading, downgrading, or canceling subscriptions
+
+## User Onboarding Flow
 
 ```mermaid
 sequenceDiagram
