@@ -1,63 +1,269 @@
 # Corp Astro Backend Server
 
-A comprehensive backend server for the Corp Astro mobile application, providing corporate astrology services, personalized content, and business astrological insights. This server is part of the larger Corp Astro ecosystem, which includes a mobile application, Super Admin Panel (SAP), Astro Ratan AI agent, and Astro Engine.
+<div align="center">
 
-## Overview
+![Corp Astro Logo](https://via.placeholder.com/200x200.png?text=Corp+Astro)
 
-Corp Astro is a comprehensive astrology project focused on corporate astrology for business aspects. This backend server provides the API and services required by the Corp Astro mobile application, integrating with other components of the ecosystem.
+**A comprehensive backend server for corporate astrology services**
 
-### Project Components
+[![TypeScript](https://img.shields.io/badge/TypeScript-4.9.5-blue.svg)](https://www.typescriptlang.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-18.x-green.svg)](https://nodejs.org/)
+[![Express](https://img.shields.io/badge/Express-4.18.2-lightgrey.svg)](https://expressjs.com/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-14.x-blue.svg)](https://www.postgresql.org/)
+[![Sequelize](https://img.shields.io/badge/Sequelize-6.x-orange.svg)](https://sequelize.org/)
+
+</div>
+
+## 📋 Overview
+
+The Corp Astro Backend Server provides the foundation for the Corp Astro mobile application, delivering corporate astrology services, personalized content, and business astrological insights. This server is built with TypeScript and follows modern backend development practices to ensure scalability, maintainability, and performance.
+
+### 🌟 What is Corp Astro?
+
+Corp Astro is a comprehensive astrology platform focused on corporate and business astrology. It helps business owners and entrepreneurs make informed decisions based on astrological insights tailored specifically for business contexts. The platform offers various features across different subscription tiers, from free basic tools to premium personalized consultations.
+
+### 🧩 Project Components
+
+```mermaid
+graph TD
+    A[Corp Astro Mobile App] <--> B[Corp Astro Backend Server]
+    B <--> C[Astro Engine]
+    B <--> D[Astro Ratan AI]
+    B <--> E[Super Admin Panel]
+    
+    style B fill:#f9f,stroke:#333,stroke-width:2px
+```
 
 1. **Corp Astro Mobile Application**: The primary client interface for users to access corporate astrology services
 2. **Corp Astro Backend Server** (this repository): Provides APIs, content generation, and business logic
-3. **Super Admin Panel (SAP)**: Web-based administration interface (developed separately)
-4. **Astro Ratan**: AI agent built using OpenAI Assistant APIs, trained on astrology texts
-5. **Astro Engine**: Software component generating charts and calculations using Swiss Ephemeris
+3. **Super Admin Panel (SAP)**: Web-based administration interface for content management and analytics (developed separately)
+4. **Astro Ratan**: AI agent built using OpenAI Assistant APIs, trained on astrology texts for personalized guidance
+5. **Astro Engine**: Core calculation component generating charts and predictions using Swiss Ephemeris with sidereal zodiac system, whole sign system, and lahiri ayanamsa
 
-### Key Features
+### 🚀 Key Features
 
-- **Content Generation System**: Creates and delivers daily horoscopes, monthly reports, and business forecasts based on subscription tier
-- **Subscription Tier Management**: Handles three tiers (free, subscription, premium) with appropriate content access
-- **Business Astrology Features**: Provides business-specific astrological insights with detailed business profiles
-- **Free Tools**: Offers name number analysis, tagline analysis, and brand color analysis using Chaldean numerology
-- **Mobile Analytics API**: Comprehensive tracking of user interactions, screen views, feature usage, and app lifecycle events
-- **Mobile-Specific API Optimizations**: Enhances performance for mobile clients with batch processing
-- **Offline Support**: Enables data synchronization for offline usage with queue management
-- **Performance Optimization**: Implements caching, compression, and other optimizations
-- **Scalability**: Supports horizontal scaling for handling increased load
-- **Analytics System**: Comprehensive tracking of user behavior, feature usage, and A/B testing to drive data-informed decisions. See [Analytics System Documentation](/docs/analytics-system.md) for details.
-- **Machine Learning Pipeline**: Integrates with ML services for personalization
+<table>
+  <tr>
+    <td width="50%">
+      <h4>🔮 Content Generation System</h4>
+      <ul>
+        <li>Daily horoscopes tailored for business contexts</li>
+        <li>Monthly business forecast reports</li>
+        <li>Personalized content based on user's birth chart</li>
+        <li>Content delivery based on subscription tier</li>
+      </ul>
+    </td>
+    <td width="50%">
+      <h4>💰 Subscription Tier Management</h4>
+      <ul>
+        <li><b>Free Tier:</b> Basic tools and limited content</li>
+        <li><b>Basic Tier:</b> Daily horoscopes, monthly reports, Astro Ratan chat</li>
+        <li><b>Premium Tier:</b> All features plus business forecasts and human consultations</li>
+        <li>Seamless subscription handling with secure payment processing</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <h4>💼 Business Astrology Features</h4>
+      <ul>
+        <li>Business natal charts based on founding date/time</li>
+        <li>Strategic timing recommendations for business decisions</li>
+        <li>Team compatibility analysis</li>
+        <li>Detailed business profile management</li>
+      </ul>
+    </td>
+    <td>
+      <h4>🔧 Free Tools</h4>
+      <ul>
+        <li>Business name numerology analysis using Chaldean system</li>
+        <li>Tagline compatibility checking</li>
+        <li>Brand color analysis and recommendations</li>
+        <li>Basic business compatibility assessments</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <h4>📊 Analytics System</h4>
+      <ul>
+        <li>Comprehensive user behavior tracking</li>
+        <li>A/B testing framework for feature optimization</li>
+        <li>Conversion and retention metrics</li>
+        <li>Feature usage analytics</li>
+      </ul>
+      <p>See <a href="/docs/analytics-system.md">Analytics Documentation</a> for details.</p>
+    </td>
+    <td>
+      <h4>📱 Mobile-Specific Optimizations</h4>
+      <ul>
+        <li>Batch processing for efficient API calls</li>
+        <li>Response optimization for different network conditions</li>
+        <li>Offline support with data synchronization</li>
+        <li>Battery-aware operations for mobile clients</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <h4>⚡ Performance & Scalability</h4>
+      <ul>
+        <li>Response caching with Redis</li>
+        <li>Horizontal scaling support</li>
+        <li>Database connection pooling</li>
+        <li>Response compression and optimization</li>
+      </ul>
+    </td>
+    <td>
+      <h4>🤖 Machine Learning Integration</h4>
+      <ul>
+        <li>Personalized content recommendations</li>
+        <li>User behavior prediction models</li>
+        <li>Content relevance scoring</li>
+        <li>Integration with Astro Ratan AI agent</li>
+      </ul>
+    </td>
+  </tr>
+</table>
 
-## Architecture
+#### Feature Implementation Status
 
-The Corp Astro backend is built with a modular architecture, organized by service domains and following clean architecture principles for separation of concerns.
+```mermaid
+gantt
+    title Feature Implementation Status
+    dateFormat  YYYY-MM-DD
+    section Core Features
+    Content Generation System       :done, 2025-01-15, 2025-04-01
+    Subscription Management         :done, 2025-01-20, 2025-03-15
+    Business Astrology Features     :done, 2025-02-01, 2025-04-15
+    Free Tools Backend             :done, 2025-02-15, 2025-04-10
+    section Mobile Features
+    Mobile API Optimizations        :done, 2025-03-01, 2025-05-01
+    Offline Support                 :done, 2025-03-15, 2025-05-10
+    Push Notifications              :done, 2025-04-01, 2025-05-15
+    section Analytics
+    Analytics System                :done, 2025-04-15, 2025-05-17
+    A/B Testing Framework           :done, 2025-04-20, 2025-05-17
+```
 
-### Directory Structure
+## 🛠️ Architecture
+
+The Corp Astro backend is built with a modular architecture, organized by service domains and following clean architecture principles for separation of concerns. This architecture makes the codebase maintainable, testable, and scalable.
+
+### 🔍 System Architecture Overview
+
+```mermaid
+flowchart TD
+    Client[Mobile Client] <--> API[API Layer]
+    API <--> Auth[Authentication & Authorization]
+    API <--> Services[Service Layer]
+    Services <--> Models[Data Models]
+    Services <--> External[External Services]
+    Models <--> DB[(Database)]
+    External <--> AstroEngine[Astro Engine]
+    External <--> AstroRatan[Astro Ratan AI]
+    
+    subgraph Backend Server
+        API
+        Auth
+        Services
+        Models
+    end
+```
+
+### 📁 Directory Structure
+
+The codebase follows a domain-driven structure, organized by feature modules and service boundaries:
 
 ```
 src/
 ├── config/           # Configuration files
-│   ├── database.config.ts     # Database connection configuration
-│   ├── redis.config.ts        # Redis connection configuration
-│   ├── jwt.config.ts          # JWT authentication configuration
-│   ├── swagger.config.ts      # API documentation configuration
-│   └── app.config.ts          # Main application configuration
-├── middleware/       # Global middleware
-│   ├── auth.middleware.ts     # Authentication middleware
-│   ├── error.middleware.ts    # Error handling middleware
-│   ├── logging.middleware.ts  # Request logging middleware
-│   └── validation.middleware.ts # Input validation middleware
-├── models/           # Data models
-│   ├── user/                  # User-related models
-│   ├── business/              # Business-related models
-│   ├── content/               # Content-related models
-│   └── subscription/          # Subscription-related models
-├── routes/           # API routes
-│   ├── auth.routes.ts         # Authentication routes
-│   ├── content.routes.ts      # Content delivery routes
-│   ├── business.routes.ts     # Business-related routes
-│   ├── mobile.routes.ts       # Mobile-specific routes
-│   └── subscription.routes.ts # Subscription management routes
+│   ├── database.ts           # Database connection configuration
+│   ├── sequelize.config.ts   # Sequelize ORM configuration
+│   ├── redis.config.ts       # Redis cache configuration
+│   ├── jwt.config.ts         # JWT authentication configuration
+│   └── app.config.ts         # Main application configuration
+│
+├── middleware/       # Global middleware components
+│   ├── auth.ts               # Authentication middleware
+│   ├── roleCheck.ts          # Role-based authorization
+│   ├── rateLimit.ts          # API rate limiting
+│   ├── error.middleware.ts   # Error handling middleware
+│   └── validation.ts         # Request validation middleware
+│
+├── database/         # Database management
+│   ├── migrations/           # Database schema migrations
+│   └── seeders/              # Seed data for development
+│
+├── models/           # Shared data models
+│   └── index.ts              # Model exports
+│
+├── services/         # Domain-specific services
+│   ├── content/              # Content generation and delivery
+│   │   ├── controllers/      # Request handlers
+│   │   ├── models/           # Content-specific models
+│   │   ├── routes/           # API routes
+│   │   └── utils/            # Helper functions
+│   │
+│   ├── user-management/      # User account management
+│   │   ├── controllers/      # User-related controllers
+│   │   ├── models/           # User models
+│   │   └── routes/           # User API routes
+│   │
+│   ├── analytics/            # Analytics system
+│   │   ├── controllers/      # Analytics endpoints
+│   │   ├── models/           # Analytics data models
+│   │   ├── utils/            # Analytics utilities
+│   │   └── routes/           # Analytics API routes
+│   │
+│   ├── mobile/               # Mobile-specific features
+│   │   ├── middleware/       # Mobile optimizations
+│   │   ├── controllers/      # Mobile API controllers
+│   │   └── routes/           # Mobile API routes
+│   │
+│   └── free-tools/           # Free tools implementation
+│       ├── controllers/      # Tool controllers
+│       ├── utils/            # Tool utilities
+│       └── routes/           # Tool API routes
+│
+├── utils/            # Shared utility functions
+│   ├── logger.ts             # Logging utilities
+│   ├── errorHandler.ts       # Error handling utilities
+│   └── validators.ts         # Input validation helpers
+│
+├── types/            # TypeScript type definitions
+│   ├── models.d.ts           # Model type definitions
+│   ├── requests.d.ts         # Request type definitions
+│   └── responses.d.ts        # Response type definitions
+│
+├── app.ts            # Application entry point
+└── server.ts         # HTTP server setup
+```
+
+### 📚 Code Organization Principles
+
+<table>
+  <tr>
+    <td width="50%">
+      <h4>🔥 Domain-Driven Design</h4>
+      <p>The codebase is organized around business domains (content, users, analytics) rather than technical concerns. Each domain has its own models, controllers, and business logic.</p>
+    </td>
+    <td width="50%">
+      <h4>🔨 Separation of Concerns</h4>
+      <p>Each component has a single responsibility. Controllers handle HTTP requests, services contain business logic, and models represent data structures.</p>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <h4>🔗 Dependency Injection</h4>
+      <p>Services and controllers receive their dependencies rather than creating them, making testing and maintenance easier.</p>
+    </td>
+    <td>
+      <h4>💬 Type Safety</h4>
+      <p>TypeScript is used throughout the codebase to ensure type safety and provide better developer experience with autocompletion and error checking.</p>
+    </td>
+  </tr>
+</table>
 ├── services/         # Domain-specific services
 │   ├── content/              # Content generation and delivery
 │   │   ├── controllers/      # Request handlers
@@ -1532,42 +1738,139 @@ The Corp Astro backend server has been implemented with the following key featur
    - Added API documentation for analytics endpoints
    - Designed database schema for analytics data storage
 
-## Getting Started
+## 🚀 Getting Started
 
-### Prerequisites
+This section will guide you through setting up the Corp Astro Backend Server for development on your local machine.
 
-- Node.js v18 or higher
-- PostgreSQL 14 or higher
-- Redis (optional, for caching and rate limiting)
+### 💻 Prerequisites
 
-### Development Setup
+<table>
+  <tr>
+    <td width="33%" align="center">
+      <img src="https://nodejs.org/static/images/logo.svg" width="50" height="50"><br>
+      <b>Node.js v18+</b>
+    </td>
+    <td width="33%" align="center">
+      <img src="https://www.postgresql.org/media/img/about/press/elephant.png" width="50" height="50"><br>
+      <b>PostgreSQL 14+</b>
+    </td>
+    <td width="33%" align="center">
+      <img src="https://redis.io/images/redis-white.png" width="50" height="50"><br>
+      <b>Redis (optional)</b>
+    </td>
+  </tr>
+</table>
 
-1. Clone the repository
-   ```bash
-   git clone https://github.com/your-username/corp-astro-server.git
-   cd corp-astro-server
-   ```
+### 👷 Development Setup
 
-2. Install dependencies
-   ```bash
-   npm install
-   ```
+Follow these steps to set up your development environment:
 
-3. Set up environment variables
-   ```bash
-   cp .env.example .env
-   # Edit .env with your database credentials and other configuration
-   ```
+<details open>
+<summary><b>1. Clone the Repository</b></summary>
 
-4. Run database migrations
-   ```bash
-   npm run db:migrate
-   ```
+```bash
+git clone https://github.com/Project-Corp-Astro/Corp_Astro_Server_Trial.git
+cd Corp_Astro_Server_Trial
+```
+</details>
 
-5. Start the development server
-   ```bash
-   npm run dev
-   ```
+<details open>
+<summary><b>2. Install Dependencies</b></summary>
+
+```bash
+npm install
+```
+
+This will install all the required packages defined in `package.json`.
+</details>
+
+<details open>
+<summary><b>3. Set Up Environment Variables</b></summary>
+
+```bash
+cp .env.example .env
+```
+
+Open the `.env` file in your favorite editor and configure the following variables:
+
+```env
+# Application
+PORT=3000
+NODE_ENV=development
+
+# Database
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=corpastro
+DB_USER=postgres
+DB_PASSWORD=postgres
+
+# JWT
+JWT_SECRET=your-secret-key
+JWT_EXPIRES_IN=1d
+
+# Redis (optional)
+REDIS_HOST=localhost
+REDIS_PORT=6379
+REDIS_PASSWORD=
+```
+</details>
+
+<details open>
+<summary><b>4. Set Up the Database</b></summary>
+
+Ensure PostgreSQL is running, then create the database:
+
+```bash
+psql -U postgres -c "CREATE DATABASE corpastro;"
+```
+
+Run the database migrations to create the schema:
+
+```bash
+npm run db:migrate
+```
+
+Seed the database with initial data (optional):
+
+```bash
+npm run db:seed
+```
+</details>
+
+<details open>
+<summary><b>5. Start the Development Server</b></summary>
+
+```bash
+npm run dev
+```
+
+The server will start at `http://localhost:3000` with hot-reloading enabled.
+
+You should see output similar to:
+
+```
+[2025-05-17 12:00:00] [INFO] Server started on port 3000
+[2025-05-17 12:00:00] [INFO] Connected to database: corpastro
+[2025-05-17 12:00:00] [INFO] Environment: development
+```
+</details>
+
+### 💯 Verifying Your Setup
+
+To verify that your setup is working correctly, you can access the following endpoints:
+
+- API Root: http://localhost:3000/api
+- Health Check: http://localhost:3000/api/health
+- API Documentation: http://localhost:3000/api-docs
+
+### 💡 Development Tips
+
+- Use `npm run test` to run the test suite
+- Use `npm run lint` to check for code style issues
+- The server uses TypeScript for type safety
+- All API endpoints are prefixed with `/api`
+- Use the Swagger documentation at `/api-docs` to explore the API
 
 ### Local Development Setup
 
