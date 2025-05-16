@@ -1,0 +1,83 @@
+version: '3.8'
+
+services:
+  # Node.js application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: corp-astro-server:latest
+    container_name: corp-astro-server
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=corp_astro_dev
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - JWT_SECRET=development_jwt_secret
+    volumes:
+      - ./:/usr/src/app
+      - /usr/src/app/node_modules
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - corp-astro-network
+
+  # PostgreSQL database
+  postgres:
+    image: postgres:14-alpine
+    container_name: corp-astro-postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=corp_astro_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - corp-astro-network
+
+  # Redis cache
+  redis:
+    image: redis:6-alpine
+    container_name: corp-astro-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - corp-astro-network
+
+  # pgAdmin for database management (optional)
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: corp-astro-pgadmin
+    restart: unless-stopped
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@corp-astro.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - corp-astro-network
+
+networks:
+  corp-astro-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
+  redis-data:
