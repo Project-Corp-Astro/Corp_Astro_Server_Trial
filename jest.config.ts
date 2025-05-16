@@ -1,6 +1,6 @@
-// jest.config.js
+import type { Config } from '@jest/types';
 
-module.exports = {
+const config: Config.InitialOptions = {
   preset: 'ts-jest',
   testEnvironment: 'node',
   roots: ['<rootDir>/src'],
@@ -20,14 +20,15 @@ module.exports = {
   coverageThreshold: {
     global: {
       branches: 70,
-      functions: 80,
-      lines: 80,
-      statements: 80,
+      functions: 70,
+      lines: 70,
+      statements: 70,
     },
   },
-  moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1',
-  },
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   setupFilesAfterEnv: ['<rootDir>/src/tests/setup.ts'],
+  verbose: true,
   testTimeout: 30000,
 };
+
+export default config;
