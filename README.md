@@ -24,7 +24,7 @@ Corp Astro is a comprehensive astrology project focused on corporate astrology f
 - **Offline Support**: Enables data synchronization for offline usage
 - **Performance Optimization**: Implements caching, compression, and other optimizations
 - **Scalability**: Supports horizontal scaling for handling increased load
-- **Analytics**: Collects and processes usage data for insights
+- **Analytics System**: Comprehensive tracking of user behavior, feature usage, and A/B testing to drive data-informed decisions
 - **Machine Learning Pipeline**: Integrates with ML services for personalization
 
 ## Architecture
@@ -1229,6 +1229,67 @@ The repository requires several secrets for CI/CD workflows:
 
 Detailed instructions for setting up these secrets are available in `/.github/repository-secrets-setup.md`.
 
+## Analytics System
+
+The Corp Astro Analytics System is a comprehensive backend infrastructure for tracking user behavior, feature usage, and business metrics for the mobile application. It is designed to collect, store, and process data to drive business decisions and improve user experience.
+
+### Key Features
+
+- **Event Tracking**: Records user interactions and app usage events
+- **Feature Usage Analysis**: Monitors which features are most popular and how they're used
+- **User Journey Tracking**: Follows users through defined flows to identify bottlenecks
+- **A/B Testing Framework**: Tests different variants to optimize user experience
+- **Offline Support**: Stores analytics events when offline and syncs when connection is restored
+- **Batch Processing**: Efficiently processes multiple events in a single request
+- **Privacy-Focused**: Implements data minimization and anonymization techniques
+
+### Architecture
+
+The analytics system consists of the following components:
+
+1. **Database Tables**: Store analytics events, user journeys, feature usage, and A/B test data
+2. **API Endpoints**: Collect analytics data from the mobile application
+3. **Processing Services**: Process and aggregate analytics data
+4. **SDK**: Simplifies integration with the mobile application
+
+### Integration
+
+#### Mobile Application Integration
+
+The mobile application should use the Analytics SDK to interact with the analytics system. The SDK provides methods for:
+
+- Tracking events and user interactions
+- Recording feature usage
+- Managing user journeys
+- Participating in A/B tests
+
+Example code for the mobile app integration can be found at:
+`/src/services/analytics/examples/mobile-sdk-integration.ts`
+
+#### Super Admin Panel (SAP) Integration
+
+The Super Admin Panel should use the dashboard data endpoints to retrieve analytics data for visualization. These endpoints provide all the necessary data for building comprehensive dashboards and reports.
+
+The SAP should implement its own dashboard components for visualizing the analytics data. The backend only provides the data through API endpoints; it does not include any frontend visualization components.
+
+Detailed API documentation is available at:
+`/docs/analytics-api-documentation.md`
+
+### Analytics API Endpoints
+
+- `POST /api/analytics/track`: Track a general analytics event
+- `POST /api/analytics/feature-usage`: Track feature usage
+- `POST /api/analytics/journey`: Track user journey progress
+- `POST /api/analytics/ui-interaction`: Track UI interaction
+- `POST /api/analytics/batch`: Batch track multiple events
+- `POST /api/analytics/ab-test/convert`: Track A/B test conversion
+- `GET /api/analytics/ab-test/variant/:testName`: Get assigned variant for a user
+- `GET /api/analytics/dashboard/metrics`: Get overview metrics
+- `GET /api/analytics/dashboard/journeys`: Get user journey metrics
+- `GET /api/analytics/dashboard/ab-tests/:testName`: Get A/B test results
+
+For more details, see the [Analytics System Documentation](/docs/analytics-system-readme.md).
+
 ## Recent Updates
 
 ### May 2025 Updates
@@ -1270,6 +1331,13 @@ Detailed instructions for setting up these secrets are available in `/.github/re
    - Created docker-compose.yml for local development
    - Implemented PM2 configuration for production deployment
    - Added deployment guide with instructions for different environments
+
+8. **Analytics System Implementation**
+   - Developed comprehensive analytics tracking infrastructure
+   - Implemented A/B testing framework for feature optimization
+   - Created mobile SDK for easy integration with the mobile app
+   - Added API documentation for analytics endpoints
+   - Designed database schema for analytics data storage
 
 ## Getting Started
 
