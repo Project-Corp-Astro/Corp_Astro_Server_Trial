@@ -651,6 +651,359 @@ module.exports = {
     await queryInterface.addIndex('generated_content', ['business_id']);
     await queryInterface.addIndex('generated_content', ['content_type']);
     await queryInterface.addIndex('generated_content', ['generation_date']);
+    
+    // Create analytics_events table
+    await queryInterface.createTable('analytics_events', {
+      event_id: {
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
+        primaryKey: true,
+        allowNull: false
+      },
+      user_id: {
+        type: Sequelize.UUID,
+        allowNull: true,
+        references: {
+          model: 'users',
+          key: 'user_id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL'
+      },
+      session_id: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
+      event_name: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      event_category: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      event_action: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      properties: {
+        type: Sequelize.JSONB,
+        allowNull: true
+      },
+      client_timestamp: {
+        type: Sequelize.DATE,
+        allowNull: true
+      },
+      server_timestamp: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+      }
+    });
+
+    // Create user_journeys table
+    await queryInterface.createTable('user_journeys', {
+      journey_id: {
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
+        primaryKey: true,
+        allowNull: false
+      },
+      user_id: {
+        type: Sequelize.UUID,
+        allowNull: false,
+        references: {
+          model: 'users',
+          key: 'user_id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
+      },
+      journey_name: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      journey_stage: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      start_time: {
+        type: Sequelize.DATE,
+        allowNull: false
+      },
+      completion_time: {
+        type: Sequelize.DATE,
+        allowNull: true
+      },
+      is_completed: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
+      },
+      journey_data: {
+        type: Sequelize.JSONB,
+        allowNull: true
+      },
+      created_at: {
+        type: Sequelize.DATE,
+        allowNull: false
+      },
+      updated_at: {
+        type: Sequelize.DATE,
+        allowNull: false
+      }
+    });
+
+    // Create feature_usage table
+    await queryInterface.createTable('feature_usage', {
+      usage_id: {
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
+        primaryKey: true,
+        allowNull: false
+      },
+      user_id: {
+        type: Sequelize.UUID,
+        allowNull: true,
+        references: {
+          model: 'users',
+          key: 'user_id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL'
+      },
+      session_id: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
+      feature_name: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      feature_category: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      duration: {
+        type: Sequelize.INTEGER,
+        allowNull: true
+      },
+      result: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
+      usage_data: {
+        type: Sequelize.JSONB,
+        allowNull: true
+      },
+      timestamp: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+      }
+    });
+
+    // Create ab_tests table
+    await queryInterface.createTable('ab_tests', {
+      test_id: {
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
+        primaryKey: true,
+        allowNull: false
+      },
+      test_name: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true
+      },
+      description: {
+        type: Sequelize.TEXT,
+        allowNull: true
+      },
+      variants: {
+        type: Sequelize.JSONB,
+        allowNull: false
+      },
+      start_date: {
+        type: Sequelize.DATE,
+        allowNull: false
+      },
+      end_date: {
+        type: Sequelize.DATE,
+        allowNull: true
+      },
+      is_active: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: true
+      },
+      created_at: {
+        type: Sequelize.DATE,
+        allowNull: false
+      },
+      updated_at: {
+        type: Sequelize.DATE,
+        allowNull: false
+      }
+    });
+
+    // Create ab_test_assignments table
+    await queryInterface.createTable('ab_test_assignments', {
+      assignment_id: {
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
+        primaryKey: true,
+        allowNull: false
+      },
+      test_id: {
+        type: Sequelize.UUID,
+        allowNull: false,
+        references: {
+          model: 'ab_tests',
+          key: 'test_id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
+      },
+      user_id: {
+        type: Sequelize.UUID,
+        allowNull: true,
+        references: {
+          model: 'users',
+          key: 'user_id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL'
+      },
+      session_id: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
+      variant: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      converted: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
+      },
+      conversion_value: {
+        type: Sequelize.FLOAT,
+        allowNull: true
+      },
+      conversion_time: {
+        type: Sequelize.DATE,
+        allowNull: true
+      },
+      assigned_at: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+      }
+    });
+
+    // Create heatmap_interactions table
+    await queryInterface.createTable('heatmap_interactions', {
+      interaction_id: {
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
+        primaryKey: true,
+        allowNull: false
+      },
+      user_id: {
+        type: Sequelize.UUID,
+        allowNull: true,
+        references: {
+          model: 'users',
+          key: 'user_id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL'
+      },
+      session_id: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
+      page_url: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      interaction_type: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      coordinates: {
+        type: Sequelize.JSONB,
+        allowNull: false
+      },
+      timestamp: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+      }
+    });
+
+    // Create astrology_metrics table
+    await queryInterface.createTable('astrology_metrics', {
+      metric_id: {
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
+        primaryKey: true,
+        allowNull: false
+      },
+      user_id: {
+        type: Sequelize.UUID,
+        allowNull: false,
+        references: {
+          model: 'users',
+          key: 'user_id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
+      },
+      metric_type: {
+        type: Sequelize.ENUM('chart_generation', 'horoscope_view', 'business_forecast', 'free_tool', 'subscription_change', 'ai_chat'),
+        allowNull: false
+      },
+      business_id: {
+        type: Sequelize.UUID,
+        allowNull: true
+      },
+      content_id: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
+      metric_data: {
+        type: Sequelize.JSONB,
+        allowNull: true
+      },
+      timestamp: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+      }
+    });
+
+    // Create indices for better query performance
+    await queryInterface.addIndex('analytics_events', ['user_id']);
+    await queryInterface.addIndex('analytics_events', ['event_category']);
+    await queryInterface.addIndex('analytics_events', ['event_name']);
+    await queryInterface.addIndex('analytics_events', ['server_timestamp']);
+    
+    await queryInterface.addIndex('user_journeys', ['user_id']);
+    await queryInterface.addIndex('user_journeys', ['journey_name']);
+    await queryInterface.addIndex('user_journeys', ['is_completed']);
+    
+    await queryInterface.addIndex('feature_usage', ['user_id']);
+    await queryInterface.addIndex('feature_usage', ['feature_name']);
+    await queryInterface.addIndex('feature_usage', ['timestamp']);
+    
+    await queryInterface.addIndex('ab_test_assignments', ['test_id']);
+    await queryInterface.addIndex('ab_test_assignments', ['user_id']);
+    await queryInterface.addIndex('ab_test_assignments', ['variant']);
+    await queryInterface.addIndex('ab_test_assignments', ['converted']);
+    
+    await queryInterface.addIndex('astrology_metrics', ['user_id']);
+    await queryInterface.addIndex('astrology_metrics', ['metric_type']);
+    await queryInterface.addIndex('astrology_metrics', ['timestamp']);
   },
 
   down: async (queryInterface, Sequelize) => {
@@ -663,6 +1016,16 @@ module.exports = {
     await queryInterface.dropTable('subscription_history');
     await queryInterface.dropTable('user_subscriptions');
     await queryInterface.dropTable('subscription_tiers');
+    // Drop analytics tables
+    await queryInterface.dropTable('astrology_metrics');
+    await queryInterface.dropTable('heatmap_interactions');
+    await queryInterface.dropTable('ab_test_assignments');
+    await queryInterface.dropTable('ab_tests');
+    await queryInterface.dropTable('feature_usage');
+    await queryInterface.dropTable('user_journeys');
+    await queryInterface.dropTable('analytics_events');
+    
+    // Drop user tables
     await queryInterface.dropTable('authentication_logs');
     await queryInterface.dropTable('user_devices');
     await queryInterface.dropTable('users');
