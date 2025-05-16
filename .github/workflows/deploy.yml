@@ -29,39 +29,17 @@ jobs:
     - name: Run tests
       run: npm test
       
-    - name: Check deployment secrets
-      id: check-secrets
-      run: |
-        if [ -n "${{ secrets.DEPLOY_KEY }}" ] && [ -n "${{ secrets.STAGING_SERVER }}" ]; then
-          echo "has_secrets=true" >> $GITHUB_OUTPUT
-        else
-          echo "has_secrets=false" >> $GITHUB_OUTPUT
-        fi
-        
     - name: Deploy to staging
-      if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.check-secrets.outputs.has_secrets == 'true'
-      env:
-        DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
-        STAGING_SERVER: ${{ secrets.STAGING_SERVER }}
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'Project-Corp-Astro/Corp_Astro_Server_Trial'
       run: |
         echo "Deploying to staging server..."
         # Add your deployment script here
-        # Example: rsync -avz --delete dist/ user@$STAGING_SERVER:/path/to/deployment/
-        
-    - name: Check Slack webhook
-      id: check-slack
-      run: |
-        if [ -n "${{ secrets.SLACK_WEBHOOK }}" ]; then
-          echo "has_webhook=true" >> $GITHUB_OUTPUT
-        else
-          echo "has_webhook=false" >> $GITHUB_OUTPUT
-        fi
+        # Example: rsync -avz --delete dist/ user@staging-server:/path/to/deployment/
         
     - name: Notify deployment status
-      if: always() && steps.check-slack.outputs.has_webhook == 'true'
+      if: always() && github.repository == 'Project-Corp-Astro/Corp_Astro_Server_Trial'
       uses: rtCamp/action-slack-notify@v2
       env:
-        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
         SLACK_CHANNEL: deployments
         SLACK_COLOR: ${{ job.status }}
         SLACK_TITLE: Deployment Status
