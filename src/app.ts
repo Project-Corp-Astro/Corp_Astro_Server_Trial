@@ -22,6 +22,11 @@ import logger from "./utils/logger";
 import { requestLogger } from "./middleware/requestLogger";
 import { applyPerformanceOptimizations } from "./services/performance";
 import { errorHandler } from "./services/performance/utils/asyncHandler";
+import analyticsRoutes from "./routes/analytics-api";
+import mobileAnalyticsRoutes from "./routes/mobile-analytics-api";
+import analyticsDashboardRoutes from "./routes/analytics-dashboard-api";
+import analyticsService, { initializeAnalytics } from "./services/analytics";
+import dashboardRoutes from "./services/analytics/routes/dashboardRoutes";
 import { memoryManager } from "./services/performance/utils/memoryManager";
 import DatabaseOptimizer from "./services/performance/utils/databaseOptimizer";
 import { performanceMonitor } from "./services/performance/utils/performanceMonitor";
@@ -97,6 +102,12 @@ const startServer = async () => {
     app.use("/api/subscription", subscriptionRoutes);
     app.use("/api/numerology", numerologyRouter);
     app.use("/api/content", contentRoutes);
+    app.use("/api/analytics", analyticsRoutes);
+    app.use("/api/analytics/dashboard", dashboardRoutes);
+    app.use("/api/mobile-analytics", mobileAnalyticsRoutes);
+    app.use("/api/analytics/dashboard/api", analyticsDashboardRoutes);
+    logger.info('✅ Mobile analytics routes registered');
+    logger.info('✅ Analytics dashboard API routes registered');
     
     // Initialize mobile service with options
     mobileService.initialize(app, {
@@ -107,6 +118,17 @@ const startServer = async () => {
       enableOfflineSupport: true
     });
     logger.info('✅ Mobile service initialized');
+    
+    // Initialize analytics system
+    initializeAnalytics(app, {
+      enableBatchProcessing: true,
+      batchSize: 20,
+      batchInterval: 60000, // 1 minute
+      enableHeatmaps: true,
+      enableABTesting: true,
+      enableOfflineSupport: true
+    });
+    logger.info('✅ Analytics system initialized');
 
     // Start memory monitoring
     memoryManager.startMonitoring();
