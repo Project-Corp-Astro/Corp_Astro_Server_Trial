@@ -1086,3 +1086,101 @@ Proprietary - All rights reserved
 ## Contact
 
 Corp Astro Support - support@corp-astro.com
+
+## GitHub Repository Setup
+
+The Corp Astro Server codebase is hosted on GitHub at [https://github.com/Project-Corp-Astro/Corp_Astro_Server_Trial](https://github.com/Project-Corp-Astro/Corp_Astro_Server_Trial). The repository has been configured with industry best practices for collaborative development.
+
+### Repository Structure
+
+- **Source Code**: Complete TypeScript codebase with comprehensive type definitions
+- **Documentation**: Detailed guides and API documentation in the `/docs` directory
+- **Configuration Files**: Project setup files including `package.json`, `tsconfig.json`, etc.
+- **GitHub Workflows**: CI/CD pipelines for automated testing and deployment
+
+### CI/CD Workflows
+
+The repository includes two main GitHub Actions workflows:
+
+1. **CI Workflow** (`/.github/workflows/ci.yml`)
+   - Triggered on pull requests and pushes to main branch
+   - Runs on multiple Node.js versions (16.x, 18.x)
+   - Installs dependencies, builds the project, runs linting and tests
+   - Uploads test coverage reports
+
+2. **Deployment Workflow** (`/.github/workflows/deploy.yml`)
+   - Triggered on pushes to main branch and manual triggers
+   - Builds and tests the application
+   - Deploys to staging environment
+   - Sends notifications about deployment status
+
+### Contribution Guidelines
+
+The repository includes several files to facilitate collaboration:
+
+- **CODEOWNERS** (`/.github/CODEOWNERS`): Defines code ownership and review requirements
+- **CONTRIBUTING.md** (`/.github/CONTRIBUTING.md`): Comprehensive guide for contributors
+- **CODE_OF_CONDUCT.md** (`/.github/CODE_OF_CONDUCT.md`): Community guidelines
+- **SECURITY.md** (`/.github/SECURITY.md`): Instructions for reporting security vulnerabilities
+- **Pull Request Template** (`/.github/PULL_REQUEST_TEMPLATE.md`): Standardized format for pull requests
+
+### Deployment Configuration
+
+The `deploy-config.js` file defines configuration settings for different environments:
+
+- **Development**: Local development environment
+- **Testing**: Environment for running automated tests
+- **Staging**: Pre-production environment for QA
+- **Production**: Live environment for end users
+
+Each environment has specific settings for:
+- Host and port configuration
+- Database connection parameters
+- Redis cache settings
+- Scaling parameters
+- Logging configuration
+
+### Branch Protection
+
+The main branch is protected with the following rules:
+
+- Require pull request reviews before merging
+- Require status checks to pass before merging
+- Require branches to be up to date before merging
+
+### Next Steps for Repository Management
+
+1. **Set up project boards** for tracking issues and features
+2. **Configure repository secrets** for CI/CD workflows
+3. **Add team members and collaborators** to the repository
+4. **Set up hosting environments** based on the deployment configuration
+
+## Recent Updates
+
+### May 2025 Updates
+
+1. **TypeScript Type System Implementation**
+   - Added comprehensive type definitions in `/src/types/`
+   - Created interfaces for all major components of the system
+   - Fixed TypeScript errors throughout the codebase
+
+2. **Error Handling System**
+   - Implemented centralized error handling with `AppError` class
+   - Added global error handling middleware
+   - Standardized error responses across the API
+
+3. **Documentation Enhancements**
+   - Updated README.md with detailed project information
+   - Added service-specific documentation in `/docs/`
+   - Included code examples and API usage guides
+
+4. **Test Updates**
+   - Updated tests to use new type definitions
+   - Improved test utilities in `testUtils.ts`
+   - Enhanced test coverage for mobile API components
+
+5. **GitHub Repository Setup**
+   - Initialized Git repository with proper structure
+   - Configured CI/CD workflows with GitHub Actions
+   - Added contribution guidelines and templates
+   - Set up deployment configuration for different environments
