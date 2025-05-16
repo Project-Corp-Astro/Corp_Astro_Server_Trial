@@ -16,15 +16,16 @@ Corp Astro is a comprehensive astrology project focused on corporate astrology f
 
 ### Key Features
 
-- **Content Generation System**: Creates and delivers daily horoscopes and monthly reports
-- **Subscription Tier Management**: Handles three tiers (free, subscription, premium)
-- **Business Astrology Features**: Provides business-specific astrological insights
-- **Free Tools**: Offers name number analysis, tagline analysis, and brand color analysis
-- **Mobile-Specific API Optimizations**: Enhances performance for mobile clients
-- **Offline Support**: Enables data synchronization for offline usage
+- **Content Generation System**: Creates and delivers daily horoscopes, monthly reports, and business forecasts based on subscription tier
+- **Subscription Tier Management**: Handles three tiers (free, subscription, premium) with appropriate content access
+- **Business Astrology Features**: Provides business-specific astrological insights with detailed business profiles
+- **Free Tools**: Offers name number analysis, tagline analysis, and brand color analysis using Chaldean numerology
+- **Mobile Analytics API**: Comprehensive tracking of user interactions, screen views, feature usage, and app lifecycle events
+- **Mobile-Specific API Optimizations**: Enhances performance for mobile clients with batch processing
+- **Offline Support**: Enables data synchronization for offline usage with queue management
 - **Performance Optimization**: Implements caching, compression, and other optimizations
 - **Scalability**: Supports horizontal scaling for handling increased load
-- **Analytics System**: Comprehensive tracking of user behavior, feature usage, and A/B testing to drive data-informed decisions
+- **Analytics System**: Comprehensive tracking of user behavior, feature usage, and A/B testing to drive data-informed decisions. See [Analytics System Documentation](/docs/analytics-system.md) for details.
 - **Machine Learning Pipeline**: Integrates with ML services for personalization
 
 ## Architecture
@@ -1290,7 +1291,192 @@ Detailed API documentation is available at:
 
 For more details, see the [Analytics System Documentation](/docs/analytics-system-readme.md).
 
+## Content Generation System
+
+The Corp Astro Content Generation System is a comprehensive backend infrastructure for delivering daily horoscopes and monthly reports. It is designed to provide personalized content to users based on their subscription tier.
+
+### Key Features
+
+- **Content Item Management**: Stores and manages content items, including horoscopes and reports
+- **User Content Interactions**: Tracks user interactions with content, including favoriting and rating
+- **Business Profile Management**: Stores and manages business profiles, including subscription tiers and content access
+- **Personalized Content Delivery**: Delivers personalized content to users based on their subscription tier and content interactions
+
+### Architecture
+
+The content generation system consists of the following components:
+
+1. **Database Tables**: Store content items, user content interactions, and business profiles
+2. **API Endpoints**: Provide access to content items and user content interactions
+3. **Content Processing Services**: Process and aggregate content data
+4. **SDK**: Simplifies integration with the mobile application
+
+### Integration
+
+#### Mobile Application Integration
+
+The mobile application should use the Content SDK to interact with the content generation system. The SDK provides methods for:
+
+- Retrieving personalized content
+- Favoriting and rating content
+- Managing user content interactions
+
+Example code for the mobile app integration can be found at:
+`/src/services/content/examples/mobile-sdk-integration.ts`
+
+#### Super Admin Panel (SAP) Integration
+
+The Super Admin Panel should use the content management endpoints to manage content items and user content interactions. These endpoints provide all the necessary data for building comprehensive content management tools.
+
+The SAP should implement its own content management components for visualizing and managing content data. The backend only provides the data through API endpoints; it does not include any frontend visualization components.
+
+Detailed API documentation is available at:
+`/docs/content-api-documentation.md`
+
+### Content API Endpoints
+
+- `GET /api/content/items`: Get a list of content items
+- `GET /api/content/items/:id`: Get a specific content item
+- `POST /api/content/items`: Create a new content item
+- `PUT /api/content/items/:id`: Update a content item
+- `DELETE /api/content/items/:id`: Delete a content item
+- `GET /api/content/user-interactions`: Get a list of user content interactions
+- `POST /api/content/user-interactions`: Create a new user content interaction
+
+For more details, see the [Content Generation System Documentation](/docs/content-generation-system-readme.md).
+
+## Free Tools Backend
+
+The Corp Astro Free Tools Backend is a comprehensive backend infrastructure for providing free tools to users, including numerology services for business name and tagline analysis.
+
+### Key Features
+
+- **Numerology Service**: Provides numerology analysis for business names and taglines
+- **Compatibility Checking**: Checks compatibility between business names and taglines
+- **Interpretations and Implications**: Provides detailed interpretations and business implications for numerology results
+
+### Architecture
+
+The free tools backend consists of the following components:
+
+1. **Database Tables**: Store numerology data and compatibility results
+2. **API Endpoints**: Provide access to numerology services and compatibility checking
+3. **Numerology Processing Services**: Process and aggregate numerology data
+4. **SDK**: Simplifies integration with the mobile application
+
+### Integration
+
+#### Mobile Application Integration
+
+The mobile application should use the Free Tools SDK to interact with the free tools backend. The SDK provides methods for:
+
+- Retrieving numerology analysis
+- Checking compatibility between business names and taglines
+- Managing user interactions with free tools
+
+Example code for the mobile app integration can be found at:
+`/src/services/free-tools/examples/mobile-sdk-integration.ts`
+
+#### Super Admin Panel (SAP) Integration
+
+The Super Admin Panel should use the free tools management endpoints to manage numerology data and compatibility results. These endpoints provide all the necessary data for building comprehensive free tools management tools.
+
+The SAP should implement its own free tools management components for visualizing and managing free tools data. The backend only provides the data through API endpoints; it does not include any frontend visualization components.
+
+Detailed API documentation is available at:
+`/docs/free-tools-api-documentation.md`
+
+### Free Tools API Endpoints
+
+- `GET /api/free-tools/numerology`: Get numerology analysis for a business name or tagline
+- `POST /api/free-tools/numerology`: Create a new numerology analysis
+- `GET /api/free-tools/compatibility`: Get compatibility results between business names and taglines
+- `POST /api/free-tools/compatibility`: Create a new compatibility check
+
+For more details, see the [Free Tools Backend Documentation](/docs/free-tools-backend-readme.md).
+
+## Mobile Analytics API
+
+The Corp Astro Mobile Analytics API is a comprehensive backend infrastructure for tracking user behavior, feature usage, and business metrics for the mobile application.
+
+### Key Features
+
+- **Event Tracking**: Records user interactions and app usage events
+- **Feature Usage Analysis**: Monitors which features are most popular and how they're used
+- **User Journey Tracking**: Follows users through defined flows to identify bottlenecks
+- **A/B Testing Framework**: Tests different variants to optimize user experience
+- **Offline Support**: Stores analytics events when offline and syncs when connection is restored
+- **Batch Processing**: Efficiently processes multiple events in a single request
+- **Privacy-Focused**: Implements data minimization and anonymization techniques
+
+### Architecture
+
+The mobile analytics API consists of the following components:
+
+1. **Database Tables**: Store analytics events, user journeys, feature usage, and A/B test data
+2. **API Endpoints**: Collect analytics data from the mobile application
+3. **Processing Services**: Process and aggregate analytics data
+4. **SDK**: Simplifies integration with the mobile application
+
+### Integration
+
+#### Mobile Application Integration
+
+The mobile application should use the Analytics SDK to interact with the mobile analytics API. The SDK provides methods for:
+
+- Tracking events and user interactions
+- Recording feature usage
+- Managing user journeys
+- Participating in A/B tests
+
+Example code for the mobile app integration can be found at:
+`/src/services/analytics/examples/mobile-sdk-integration.ts`
+
+#### Super Admin Panel (SAP) Integration
+
+The Super Admin Panel should use the dashboard data endpoints to retrieve analytics data for visualization. These endpoints provide all the necessary data for building comprehensive dashboards and reports.
+
+The SAP should implement its own dashboard components for visualizing the analytics data. The backend only provides the data through API endpoints; it does not include any frontend visualization components.
+
+Detailed API documentation is available at:
+`/docs/analytics-api-documentation.md`
+
+### Analytics API Endpoints
+
+- `POST /api/analytics/track`: Track a general analytics event
+- `POST /api/analytics/feature-usage`: Track feature usage
+- `POST /api/analytics/journey`: Track user journey progress
+- `POST /api/analytics/ui-interaction`: Track UI interaction
+- `POST /api/analytics/batch`: Batch track multiple events
+- `POST /api/analytics/ab-test/convert`: Track A/B test conversion
+- `GET /api/analytics/ab-test/variant/:testName`: Get assigned variant for a user
+- `GET /api/analytics/dashboard/metrics`: Get overview metrics
+- `GET /api/analytics/dashboard/journeys`: Get user journey metrics
+- `GET /api/analytics/dashboard/ab-tests/:testName`: Get A/B test results
+
+For more details, see the [Mobile Analytics API Documentation](/docs/mobile-analytics-api-readme.md).
+
 ## Recent Updates
+
+### Version 1.6.0 (2025-05-17)
+
+1. **Content Generation System**
+   - Implemented infrastructure for delivering daily horoscopes and monthly reports
+   - Created models for content items, user content interactions, and business profiles
+   - Added API endpoints for retrieving personalized content based on subscription tier
+   - Implemented content favoriting and rating functionality
+
+2. **Free Tools Backend**
+   - Developed numerology service for business name and tagline analysis using Chaldean numerology
+   - Created API endpoints for free tools with no authentication required
+   - Implemented compatibility checking between business names and taglines
+   - Added detailed interpretations and business implications for numerology results
+
+3. **Mobile Analytics API**
+   - Implemented comprehensive tracking of user interactions, screen views, and app lifecycle events
+   - Added support for A/B testing with variant assignment and conversion tracking
+   - Created batch processing for efficient data handling and offline support
+   - Developed feature usage tracking for data-driven decision making
 
 ### May 2025 Updates
 
