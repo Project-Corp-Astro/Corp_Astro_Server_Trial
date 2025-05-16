@@ -1,0 +1,30 @@
+name: Corp Astro Server Project Board
+
+on:
+  issues:
+    types: [opened, labeled, unlabeled]
+  pull_request:
+    types: [opened, labeled, unlabeled]
+
+jobs:
+  project_management:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Add to project board
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.PROJECT_TOKEN }}
+          script: |
+            // Script to automatically add issues and PRs to project board
+            // This is a placeholder - actual implementation would use GitHub's GraphQL API
+            console.log('Adding item to project board');
+            
+            // Example fields to categorize work
+            const fields = {
+              'Status': 'To Do',
+              'Priority': issue.labels.includes('high-priority') ? 'High' : 'Medium',
+              'Type': issue.labels.includes('bug') ? 'Bug' : 'Feature',
+              'Sprint': 'Current'
+            };
+            
+            // Add to project board logic would go here

@@ -1,0 +1,34 @@
+# These owners will be the default owners for everything in the repo.
+# Unless a later match takes precedence, these owners will be requested for
+# review when someone opens a pull request.
+* @Project-Corp-Astro/maintainers
+
+# Core server configuration
+/src/app.ts @Project-Corp-Astro/core-team
+/src/config/ @Project-Corp-Astro/core-team
+
+# Type definitions
+/src/types/ @Project-Corp-Astro/typescript-experts
+
+# Mobile service
+/src/services/mobile/ @Project-Corp-Astro/mobile-team
+
+# Content service
+/src/services/content/ @Project-Corp-Astro/content-team
+
+# Subscription service
+/src/services/subscription/ @Project-Corp-Astro/subscription-team
+
+# User management service
+/src/services/user-management/ @Project-Corp-Astro/user-management-team
+
+# Performance and scalability services
+/src/services/performance/ @Project-Corp-Astro/performance-team
+/src/services/scalability/ @Project-Corp-Astro/performance-team
+
+# Documentation
+/docs/ @Project-Corp-Astro/docs-team
+*.md @Project-Corp-Astro/docs-team
+
+# Tests
+**/__tests__/ @Project-Corp-Astro/qa-team
