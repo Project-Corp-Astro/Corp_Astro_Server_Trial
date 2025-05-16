@@ -1093,10 +1093,37 @@ The Corp Astro Server codebase is hosted on GitHub at [https://github.com/Projec
 
 ### Repository Structure
 
-- **Source Code**: Complete TypeScript codebase with comprehensive type definitions
-- **Documentation**: Detailed guides and API documentation in the `/docs` directory
-- **Configuration Files**: Project setup files including `package.json`, `tsconfig.json`, etc.
-- **GitHub Workflows**: CI/CD pipelines for automated testing and deployment
+```
+├── .github/                # GitHub-specific files
+│   ├── ISSUE_TEMPLATE/     # Templates for different issue types
+│   ├── workflows/          # GitHub Actions CI/CD workflows
+│   ├── CODEOWNERS          # Code ownership definitions
+│   ├── CODE_OF_CONDUCT.md  # Community guidelines
+│   ├── CONTRIBUTING.md     # Contribution guidelines
+│   ├── PULL_REQUEST_TEMPLATE.md # PR template
+│   ├── SECURITY.md         # Security policy
+│   └── project-board-setup.md # Project board configuration
+├── docs/                   # Documentation files
+│   ├── deployment-guide.md # Deployment instructions
+│   ├── mobile-api-guide.md # Mobile API documentation
+│   └── ...                 # Other documentation files
+├── src/                    # Source code
+│   ├── config/             # Configuration files
+│   ├── database/           # Database migrations and seeders
+│   ├── services/           # Service-specific code
+│   ├── types/              # TypeScript type definitions
+│   └── utils/              # Utility functions
+├── .dockerignore           # Docker ignore file
+├── .env.example            # Example environment variables
+├── .gitignore              # Git ignore file
+├── .sequelizerc            # Sequelize configuration
+├── Dockerfile              # Docker configuration
+├── docker-compose.yml      # Docker Compose configuration
+├── ecosystem.config.js     # PM2 configuration
+├── deploy-config.js        # Deployment configuration
+├── package.json            # Node.js dependencies
+└── tsconfig.json           # TypeScript configuration
+```
 
 ### CI/CD Workflows
 
@@ -1114,6 +1141,24 @@ The repository includes two main GitHub Actions workflows:
    - Deploys to staging environment
    - Sends notifications about deployment status
 
+### Issue Management
+
+The repository includes several templates and configurations for issue management:
+
+1. **Issue Templates**
+   - Bug Report Template (`/.github/ISSUE_TEMPLATE/bug_report.md`)
+   - Feature Request Template (`/.github/ISSUE_TEMPLATE/feature_request.md`)
+   - Documentation Update Template (`/.github/ISSUE_TEMPLATE/documentation_update.md`)
+
+2. **Project Board Setup** (`/.github/project-board-setup.md`)
+   - Development Roadmap board for tracking overall progress
+   - Bug Tracking board for managing bugs
+   - Release Planning board for planning releases
+
+3. **Labels and Milestones**
+   - Predefined labels for categorizing issues
+   - Milestone configuration for tracking progress towards specific goals
+
 ### Contribution Guidelines
 
 The repository includes several files to facilitate collaboration:
@@ -1124,36 +1169,65 @@ The repository includes several files to facilitate collaboration:
 - **SECURITY.md** (`/.github/SECURITY.md`): Instructions for reporting security vulnerabilities
 - **Pull Request Template** (`/.github/PULL_REQUEST_TEMPLATE.md`): Standardized format for pull requests
 
+### Database Configuration
+
+The repository includes a complete database migration system using Sequelize:
+
+1. **Migration Files** (`/src/database/migrations/`)
+   - Initial schema creation with tables for users, subscriptions, content, etc.
+   - Indexes for performance optimization
+
+2. **Seed Files** (`/src/database/seeders/`)
+   - Initial data for testing and development
+   - Sample users, businesses, subscription tiers, and content templates
+
+3. **Database Configuration** (`/src/config/database.js`)
+   - Environment-specific database connection settings
+   - Configuration for development, test, staging, and production environments
+
+4. **NPM Scripts**
+   - `npm run db:migrate`: Run pending migrations
+   - `npm run db:seed`: Seed the database with initial data
+   - `npm run db:reset`: Reset the database and run all migrations and seeders
+
 ### Deployment Configuration
 
-The `deploy-config.js` file defines configuration settings for different environments:
+The repository includes several files for deployment:
 
-- **Development**: Local development environment
-- **Testing**: Environment for running automated tests
-- **Staging**: Pre-production environment for QA
-- **Production**: Live environment for end users
+1. **Docker Configuration**
+   - `Dockerfile`: Multi-stage build for production deployment
+   - `docker-compose.yml`: Local development environment with PostgreSQL and Redis
 
-Each environment has specific settings for:
-- Host and port configuration
-- Database connection parameters
-- Redis cache settings
-- Scaling parameters
-- Logging configuration
+2. **PM2 Configuration** (`ecosystem.config.js`)
+   - Process management for production deployment
+   - Cluster mode for horizontal scaling
+   - Environment-specific settings
 
-### Branch Protection
+3. **Deployment Guide** (`/docs/deployment-guide.md`)
+   - Instructions for deploying to different environments
+   - Manual and automated deployment procedures
+   - Rollback procedures
 
-The main branch is protected with the following rules:
+4. **Environment Configuration** (`deploy-config.js`)
+   - Settings for development, testing, staging, and production environments
+   - Database, Redis, scaling, and logging configuration
 
-- Require pull request reviews before merging
-- Require status checks to pass before merging
-- Require branches to be up to date before merging
+### Repository Secrets
 
-### Next Steps for Repository Management
+The repository requires several secrets for CI/CD workflows:
 
-1. **Set up project boards** for tracking issues and features
-2. **Configure repository secrets** for CI/CD workflows
-3. **Add team members and collaborators** to the repository
-4. **Set up hosting environments** based on the deployment configuration
+1. **CI/CD Workflow Secrets**
+   - `CODECOV_TOKEN`: For uploading test coverage reports
+   - `DEPLOY_KEY`: SSH key for deployment
+   - `STAGING_SERVER`: Staging server hostname
+   - `SLACK_WEBHOOK`: Webhook URL for Slack notifications
+
+2. **Environment-Specific Secrets**
+   - Database credentials for different environments
+   - Redis credentials for different environments
+   - JWT secrets for authentication
+
+Detailed instructions for setting up these secrets are available in `/.github/repository-secrets-setup.md`.
 
 ## Recent Updates
 
@@ -1184,3 +1258,126 @@ The main branch is protected with the following rules:
    - Configured CI/CD workflows with GitHub Actions
    - Added contribution guidelines and templates
    - Set up deployment configuration for different environments
+
+6. **Database Migration System**
+   - Created Sequelize migration system for database schema management
+   - Implemented initial schema with tables for users, subscriptions, content, etc.
+   - Added seed data for testing and development
+   - Added npm scripts for database management
+
+7. **Docker and PM2 Configuration**
+   - Added Docker configuration for containerized deployment
+   - Created docker-compose.yml for local development
+   - Implemented PM2 configuration for production deployment
+   - Added deployment guide with instructions for different environments
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 16.x or 18.x
+- PostgreSQL 14.x or later
+- Redis 6.x or later
+- Docker and Docker Compose (optional, for containerized development)
+
+### Local Development Setup
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Project-Corp-Astro/Corp_Astro_Server_Trial.git
+   cd Corp_Astro_Server_Trial
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Set up environment variables**
+   ```bash
+   cp .env.example .env
+   # Edit .env file with your local configuration
+   ```
+
+4. **Set up the database**
+   ```bash
+   npm run db:migrate
+   npm run db:seed
+   ```
+
+5. **Start the development server**
+   ```bash
+   npm run dev
+   ```
+
+### Docker Development Setup
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Project-Corp-Astro/Corp_Astro_Server_Trial.git
+   cd Corp_Astro_Server_Trial
+   ```
+
+2. **Set up environment variables**
+   ```bash
+   cp .env.example .env
+   # Edit .env file with your local configuration
+   ```
+
+3. **Start the Docker containers**
+   ```bash
+   npm run docker:up
+   ```
+
+4. **Access the application**
+   - API: http://localhost:3000
+   - pgAdmin: http://localhost:5050 (admin@corp-astro.com / admin)
+
+### Running Tests
+
+```bash
+# Run all tests
+npm test
+
+# Run tests with coverage
+npm run test:coverage
+
+# Run specific test categories
+npm run test:unit
+npm run test:mobile
+npm run test:content
+```
+
+## Deployment
+
+Detailed deployment instructions are available in the [Deployment Guide](/docs/deployment-guide.md).
+
+### Quick Deployment Steps
+
+1. **Build the application**
+   ```bash
+   npm run build
+   ```
+
+2. **Deploy using PM2**
+   ```bash
+   pm2 start ecosystem.config.js --env production
+   ```
+
+3. **Deploy using Docker**
+   ```bash
+   npm run docker:build
+   docker run -p 3000:3000 --env-file .env corp-astro-server
+   ```
+
+## Contributing
+
+Please read [CONTRIBUTING.md](/.github/CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
+
+## Security
+
+For information about reporting security vulnerabilities, please read [SECURITY.md](/.github/SECURITY.md).
+
+## License
+
+Proprietary - All rights reserved
